@@ -1,0 +1,6 @@
+[
+	{
+		"pkg": "tcp-comm",
+		"classpath": "com.meem.plugins.tcpcomm.TCPPlugin"
+	}
+]
