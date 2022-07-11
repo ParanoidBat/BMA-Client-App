@@ -1,5 +1,6 @@
 import React from "react";
 import { TCP } from "tcp-comm";
+import { Button } from "@mui/material";
 
 const TCPComm = () => {
   const lel = async () => {
@@ -8,7 +9,7 @@ const TCPComm = () => {
 
   return (
     <div>
-      <button onClick={() => lel()}>Bhej de</button>
+      <Button onClick={() => lel()}>Bhej de</Button>
     </div>
   );
 };
