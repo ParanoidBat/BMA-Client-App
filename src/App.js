@@ -1,36 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import {
-  Route,
-  NavLink,
-  Routes,
-  BrowserRouter as Router,
-} from "react-router-dom";
-import Home from "./Home";
-import Contact from "./Contact";
-import TCP from "./TCP";
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
+import AppRoutes from "Routes";
+import SideDrawer from "components/side_drawer";
 
 export default function App() {
+  const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const handleClose = () => setOpenDrawer(false);
+
   return (
-    <Router>
-      <div>
-        <h1>Simple SPA</h1>
-        <ul className="header">
-          <li>
-            <NavLink to="/">Home</NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact">Contact</NavLink>
-          </li>
-          <li>
-            <NavLink to="/tcp">TCP</NavLink>
-          </li>
-        </ul>
-      </div>
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/tcp" element={<TCP />} />
-      </Routes>
-    </Router>
+    <>
+      <CssBaseline />
+      <Router>
+        <AppBar position="fixed">
+          <Toolbar>
+            <IconButton edge="start" onClick={() => setOpenDrawer(true)}>
+              <MenuIcon />
+            </IconButton>
+            <Typography component="div" variant="h6">
+              A Drawer
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Offset />
+        <SideDrawer open={openDrawer} handleClose={handleClose} />
+        <AppRoutes />
+      </Router>
+    </>
   );
 }
