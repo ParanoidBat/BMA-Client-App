@@ -6,6 +6,8 @@ const styles = {
   Link: {
     textDecoration: "none",
     color: "inherit",
+    display: "flex",
+    justifyContent: "space-around",
   },
 };
 
