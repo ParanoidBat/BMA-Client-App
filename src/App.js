@@ -10,11 +10,12 @@ import {
 import { styled } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppRoutes from "Routes";
-import SideDrawer from "components/side_drawer";
+import SideDrawer from "components/SideDrawer";
 
 export default function App() {
   const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [appBarTitle, setAppBarTitle] = useState("Today's Report");
   const handleClose = () => setOpenDrawer(false);
 
   return (
@@ -24,15 +25,19 @@ export default function App() {
         <AppBar position="fixed">
           <Toolbar>
             <IconButton edge="start" onClick={() => setOpenDrawer(true)}>
-              <MenuIcon />
+              <MenuIcon sx={{ color: "white" }} />
             </IconButton>
             <Typography component="div" variant="h6">
-              A Drawer
+              {appBarTitle}
             </Typography>
           </Toolbar>
         </AppBar>
         <Offset />
-        <SideDrawer open={openDrawer} handleClose={handleClose} />
+        <SideDrawer
+          open={openDrawer}
+          handleClose={handleClose}
+          setAppBarTitle={setAppBarTitle}
+        />
         <AppRoutes />
       </Router>
     </>

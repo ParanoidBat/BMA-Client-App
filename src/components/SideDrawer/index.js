@@ -1,13 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  Divider,
-  Grid,
-} from "@mui/material";
+import { Drawer, List, ListItem, ListItemButton, Divider } from "@mui/material";
 import {
   ChevronLeftOutlined,
   ArticleOutlined,
@@ -19,7 +12,7 @@ import {
 } from "@mui/icons-material";
 import styles from "./styles";
 
-export default function SideDrawer({ open, handleClose }) {
+export default function SideDrawer({ open, handleClose, setAppBarTitle }) {
   const reportLinks = [
     {
       text: "Today's Report",
@@ -69,7 +62,7 @@ export default function SideDrawer({ open, handleClose }) {
       <List onClick={() => handleClose()}>
         {reportLinks.map((report, index) => (
           <ListItem key={`report-${index}`}>
-            <ListItemButton>
+            <ListItemButton onClick={() => setAppBarTitle(report.text)}>
               <NavLink to={report.path} style={styles.Link}>
                 {report.icon} {report.text}
               </NavLink>
@@ -79,7 +72,7 @@ export default function SideDrawer({ open, handleClose }) {
         <Divider />
         {userLinks.map((user, index) => (
           <ListItem key={`user-${index}`}>
-            <ListItemButton>
+            <ListItemButton onClick={() => setAppBarTitle(user.text)}>
               <NavLink to={user.path} style={styles.Link}>
                 {user.icon} {user.text}
               </NavLink>
@@ -89,7 +82,7 @@ export default function SideDrawer({ open, handleClose }) {
         <Divider />
         {miscellaneousLinks.map((misc, index) => (
           <ListItem key={`misc-${index}`}>
-            <ListItemButton>
+            <ListItemButton onClick={() => setAppBarTitle(misc.text)}>
               <NavLink to={misc.path} style={styles.Link}>
                 {misc.icon} {misc.text}
               </NavLink>
