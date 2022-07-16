@@ -38,7 +38,9 @@ export default function App() {
           handleClose={handleClose}
           setAppBarTitle={setAppBarTitle}
         />
-        <AppRoutes />
+        <div style={{ padding: "10px" }}>
+          <AppRoutes />
+        </div>
       </Router>
     </>
   );

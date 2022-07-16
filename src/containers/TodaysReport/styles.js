@@ -10,9 +10,6 @@ const styles = {
     marginBottom: "5px",
     backgroundColor: "#f7f7f7",
   },
-  mainGrid: {
-    padding: "10px",
-  },
   checkInColor: {
     color: "#2e7d32",
   },

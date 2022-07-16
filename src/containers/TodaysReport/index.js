@@ -41,7 +41,7 @@ export default function TodaysReport() {
   }, []);
 
   return (
-    <Grid container justifyContent="center" sx={styles.mainGrid}>
+    <Grid container justifyContent="center">
       <Grid item xs={"auto"} sx={styles.chipGrid}>
         <Chip
           label={`Attendance ${percentageAttendance}%`}
