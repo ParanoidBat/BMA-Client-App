@@ -8,6 +8,10 @@ const styles = {
     position: "absolute",
     bottom: "10px",
   },
+  container: {
+    height: "90vh",
+    padding: "10px",
+  },
 };
 
 export default styles;

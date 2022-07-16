@@ -17,7 +17,7 @@ export default function SideDrawer({ open, handleClose, setAppBarTitle }) {
     {
       text: "Today's Report",
       icon: <ArticleOutlined />,
-      path: "/",
+      path: "/today-report",
     },
     {
       text: "Reports",

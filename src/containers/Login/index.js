@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Grid,
   Typography,
@@ -13,9 +13,10 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 import styles from "./styles";
+import { AuthContext } from "contexts/authContext";
 
 export default function Login() {
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
   const [credentials, setCredentials] = useState({});
   const [visible, setVisible] = useState(false);
   const [loginError, setLoginError] = useState(null);
@@ -24,6 +25,8 @@ export default function Login() {
     email: false,
     password: false,
   });
+
+  const { setAuthObject } = useContext(AuthContext);
 
   const handleInputChange = (e) => {
     if (inputError[e.target.name])
@@ -51,12 +54,19 @@ export default function Login() {
       })
       .then((res) => {
         setLoading(false);
+
         if (res.data.error) {
           setLoginError(res.data.error);
           return;
         }
 
-        setData(res.data.data);
+        // setData(res.data.data);
+        const data = res.data.data;
+        setAuthObject({
+          token: data.token,
+          id: data.id,
+          orgID: data.orgID,
+        });
       })
       .catch((err) => {
         setLoading(false);
@@ -65,7 +75,7 @@ export default function Login() {
   };
 
   return (
-    <Grid container direction={"column"} style={{ height: "90vh" }}>
+    <Grid container direction={"column"} sx={styles.container}>
       <Grid item xs={6}></Grid>
       <Grid container item xs={6} direction={"column"} sx={styles.contentGrid}>
         <TextField
