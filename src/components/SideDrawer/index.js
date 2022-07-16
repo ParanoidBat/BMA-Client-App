@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Drawer, List, ListItem, ListItemButton, Divider } from "@mui/material";
 import {
@@ -9,10 +9,15 @@ import {
   PersonAddAltOutlined,
   SettingsOutlined,
   PhonelinkSetup,
+  LogoutOutlined,
 } from "@mui/icons-material";
+import { AuthContext } from "contexts/authContext";
 import styles from "./styles";
 
 export default function SideDrawer({ open, handleClose, setAppBarTitle }) {
+  const { setAuthObject } = useContext(AuthContext);
+  const logout = () => setAuthObject(null);
+
   const reportLinks = [
     {
       text: "Today's Report",
@@ -89,6 +94,14 @@ export default function SideDrawer({ open, handleClose, setAppBarTitle }) {
             </ListItemButton>
           </ListItem>
         ))}
+        <Divider />
+        <ListItem>
+          <ListItemButton onClick={logout}>
+            <span style={styles.Link}>
+              <LogoutOutlined /> Logout
+            </span>
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

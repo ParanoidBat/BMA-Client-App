@@ -25,7 +25,7 @@ export default function App() {
     <>
       <CssBaseline />
       <Router>
-        {!authObject.token ? (
+        {!authObject ? (
           <Login />
         ) : (
           <>
