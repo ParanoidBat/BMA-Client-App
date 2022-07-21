@@ -14,6 +14,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 import styles from "./styles";
 import { AuthContext } from "contexts/authContext";
+import { Storage } from "@capacitor/storage";
 
 export default function Login() {
   // const [data, setData] = useState();
@@ -52,7 +53,7 @@ export default function Login() {
         email: credentials.email,
         password: credentials.password,
       })
-      .then((res) => {
+      .then(async (res) => {
         setLoading(false);
 
         if (res.data.error) {
@@ -60,8 +61,13 @@ export default function Login() {
           return;
         }
 
-        // setData(res.data.data);
         const data = res.data.data;
+
+        await Storage.set({
+          key: "OrgID",
+          value: data.orgID,
+        });
+
         setAuthObject({
           token: data.token,
           id: data.id,

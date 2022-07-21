@@ -1,5 +1,9 @@
 [
 	{
+		"pkg": "@capacitor/storage",
+		"classpath": "com.capacitorjs.plugins.storage.StoragePlugin"
+	},
+	{
 		"pkg": "tcp-comm",
 		"classpath": "com.meem.plugins.tcpcomm.TCPPlugin"
 	}

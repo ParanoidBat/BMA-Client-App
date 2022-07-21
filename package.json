@@ -5,6 +5,7 @@
   "dependencies": {
     "@capacitor/android": "^3.6.0",
     "@capacitor/core": "^3.6.0",
+    "@capacitor/storage": "^1.2.5",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
