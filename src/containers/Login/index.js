@@ -16,8 +16,7 @@ import styles from "./styles";
 import { AuthContext } from "contexts/authContext";
 import { Storage } from "@capacitor/storage";
 
-export default function Login() {
-  // const [data, setData] = useState();
+export default function Login({ setFirstPage }) {
   const [credentials, setCredentials] = useState({});
   const [visible, setVisible] = useState(false);
   const [loginError, setLoginError] = useState(null);
@@ -139,7 +138,9 @@ export default function Login() {
           </Grid>
         </Grid>
         <Grid item xs={2} alignSelf="center">
-          <Button variant="text">Sign Up</Button>
+          <Button variant="text" onClick={() => setFirstPage("Signup")}>
+            Sign Up
+          </Button>
         </Grid>
       </Grid>
       {loginError && (

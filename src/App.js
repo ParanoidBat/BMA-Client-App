@@ -13,20 +13,28 @@ import AppRoutes from "routes/AppRoutes";
 import SideDrawer from "components/SideDrawer";
 import { AuthContext } from "contexts/authContext";
 import Login from "containers/Login";
+import Signup from "containers/Signup";
 
 export default function App() {
-  const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [appBarTitle, setAppBarTitle] = useState("Today's Report");
-  const handleClose = () => setOpenDrawer(false);
+  const [firstPage, setFirstPage] = useState("Login");
+
   const { authObject } = useContext(AuthContext);
+
+  const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
+  const handleClose = () => setOpenDrawer(false);
 
   return (
     <>
       <CssBaseline />
       <Router>
         {!authObject ? (
-          <Login />
+          firstPage === "Login" ? (
+            <Login setFirstPage={setFirstPage} />
+          ) : (
+            <Signup setFirstPage={setFirstPage} />
+          )
         ) : (
           <>
             <AppBar position="fixed">
@@ -44,6 +52,7 @@ export default function App() {
               open={openDrawer}
               handleClose={handleClose}
               setAppBarTitle={setAppBarTitle}
+              setFirstPage={setFirstPage}
             />
             <div style={{ padding: "10px" }}>
               <AppRoutes />

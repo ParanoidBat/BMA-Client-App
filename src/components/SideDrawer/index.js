@@ -14,9 +14,18 @@ import {
 import { AuthContext } from "contexts/authContext";
 import styles from "./styles";
 
-export default function SideDrawer({ open, handleClose, setAppBarTitle }) {
+export default function SideDrawer({
+  open,
+  handleClose,
+  setAppBarTitle,
+  setFirstPage,
+}) {
   const { setAuthObject } = useContext(AuthContext);
-  const logout = () => setAuthObject(null);
+
+  const logout = () => {
+    setAuthObject(null);
+    setFirstPage("Login");
+  };
 
   const reportLinks = [
     {
