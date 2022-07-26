@@ -3,7 +3,6 @@ import {
   Tab,
   Tabs,
   Grid,
-  CircularProgress,
   Chip,
   Alert,
   Typography,
@@ -14,6 +13,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
+import Progress from "components/Progress";
 
 import styles from "./styles";
 
@@ -21,7 +21,7 @@ export default function Reports() {
   const [value, setValue] = useState(0);
   const [reports, setReports] = useState();
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState({});
 
   const { authObject } = useContext(AuthContext);
@@ -48,6 +48,8 @@ export default function Reports() {
         return;
       }
 
+      setLoading(true);
+
       axios
         .post(
           `https://bma-api-v1.herokuapp.com/report/${reportFor}/${authObject.orgID}?page=1`,
@@ -58,7 +60,10 @@ export default function Reports() {
         )
         .then((res) => {
           if (res.data.error) setError(res.data.error);
-          else setReports(res.data);
+          else {
+            setReports(res.data);
+            setLoading(false);
+          }
         })
         .catch((error) => setError(error));
     } else {
@@ -70,6 +75,7 @@ export default function Reports() {
           if (res.data.error) setError(res.data.error);
           else {
             setReports(res.data);
+            setLoading(false);
           }
         })
         .catch((error) => setError(error));
@@ -124,7 +130,9 @@ export default function Reports() {
           </Grid>
         </Grid>
       )}
-      {reports && (
+      {true ? (
+        <Progress color="info" />
+      ) : (
         <>
           <Grid item sx={styles.chipGrid}>
             <Chip
