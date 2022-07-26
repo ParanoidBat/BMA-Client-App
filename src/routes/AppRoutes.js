@@ -1,13 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import TCP from "TCP";
+import Setup from "containers/Setup";
 import TodaysReport from "containers/TodaysReport";
+import Reports from "containers/Reports";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<TodaysReport />} />
-      <Route path="/tcp" element={<TCP />} />
+      <Route path="/setup" element={<Setup />} />
+      <Route path="/reports" element={<Reports />} />
     </Routes>
   );
 }

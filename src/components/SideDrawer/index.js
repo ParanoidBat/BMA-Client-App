@@ -36,7 +36,7 @@ export default function SideDrawer({
     {
       text: "Reports",
       icon: <FeedOutlined />,
-      path: "/contact",
+      path: "/reports",
     },
   ];
 
@@ -62,7 +62,7 @@ export default function SideDrawer({
     {
       text: "Setup",
       icon: <PhonelinkSetup />,
-      path: "/tcp",
+      path: "/setup",
     },
   ];
 

@@ -1,102 +1,106 @@
-import React, { useEffect, useState } from "react";
-import { Grid, Typography, Card, CardContent, Chip } from "@mui/material";
+import React, { useEffect, useState, useContext } from "react";
+import {
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Chip,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
+import { AuthContext } from "contexts/authContext";
 import axios from "axios";
 import styles from "./styles";
 
 export default function TodaysReport() {
-  const [data, setData] = useState({});
-  const dummyData = [
-    {
-      userName: "batman",
-      date: "2022-07-15",
-      timeIn: "12:17:15",
-      timeOut: null,
-    },
-    {
-      userName: "paro",
-      date: "2022-07-15",
-      timeIn: "12:18:15",
-      timeOut: null,
-    },
-    {
-      userName: "someone",
-      date: "2022-07-15",
-      timeIn: "12:17:15",
-      timeOut: "01:01:10",
-    },
-  ];
-  const percentageAttendance = 80;
+  const [report, setReport] = useState();
+  const [error, setError] = useState(null);
+
+  const { authObject } = useContext(AuthContext);
 
   useEffect(() => {
     axios
-      .get(
-        "https://bma-api-v1.herokuapp.com/report/today/620a53213836b50023b57fa1"
-      )
+      .get(`https://bma-api-v1.herokuapp.com/report/today/${authObject.orgID}`)
       .then((res) => {
-        setData({
-          data: res.data.data,
-          percentageAttendance: res.data.percentageAttendance,
-        });
-      });
+        if (res.data.error) setError(res.data.error);
+        else {
+          setReport(res.data);
+        }
+      })
+      .catch((error) => setError(error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Grid container justifyContent="center">
-      <Grid item xs={"auto"} sx={styles.chipGrid}>
-        <Chip
-          label={`Attendance ${percentageAttendance}%`}
-          color={
-            percentageAttendance >= 80
-              ? "success"
-              : percentageAttendance >= 50
-              ? "info"
-              : "error"
-          }
-          sx={styles.chip}
-        />
+    report && (
+      <Grid container justifyContent="center">
+        <Grid item xs={"auto"} sx={styles.chipGrid}>
+          <Chip
+            label={`Attendance ${report.percentageAttendance}%`}
+            color={
+              report.percentageAttendance >= 80
+                ? "success"
+                : report.percentageAttendance >= 50
+                ? "info"
+                : "error"
+            }
+            sx={styles.chip}
+          />
+        </Grid>
+        <Grid container item direction="column">
+          {report.data.map((reportObj, index) => (
+            <Card key={`${reportObj.userName}-${index}`} sx={styles.card}>
+              <CardContent>
+                <Typography
+                  component="div"
+                  align="center"
+                  gutterBottom
+                  sx={styles.userName}
+                >
+                  {reportObj.userName}
+                </Typography>
+                <Grid container item>
+                  <Grid item xs={4}>
+                    <Typography
+                      style={{ ...styles.checkInColor, ...styles.infoFont }}
+                    >
+                      CheckIn
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography sx={styles.infoFont}>
+                      {reportObj.timeIn}
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container item>
+                  <Grid item xs={4}>
+                    <Typography
+                      style={{ ...styles.checkOutColor, ...styles.infoFont }}
+                    >
+                      CheckOut
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography sx={styles.infoFont}>
+                      {reportObj.timeOut ?? "None"}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          ))}
+        </Grid>
+        {error && (
+          <Alert
+            severity="error"
+            sx={styles.alert}
+            onClose={() => setError(null)}
+          >
+            {error}
+          </Alert>
+        )}
       </Grid>
-      <Grid container item direction="column">
-        {dummyData.map((datum, index) => (
-          <Card key={`${datum.userName}-${index}`} sx={styles.card}>
-            <CardContent>
-              <Typography
-                component="div"
-                align="center"
-                gutterBottom
-                sx={styles.userName}
-              >
-                {datum.userName}
-              </Typography>
-              <Grid container item>
-                <Grid item xs={4}>
-                  <Typography
-                    style={{ ...styles.checkInColor, ...styles.infoFont }}
-                  >
-                    CheckIn
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography sx={styles.infoFont}>{datum.timeIn}</Typography>
-                </Grid>
-              </Grid>
-              <Grid container item>
-                <Grid item xs={4}>
-                  <Typography
-                    style={{ ...styles.checkOutColor, ...styles.infoFont }}
-                  >
-                    CheckOut
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography sx={styles.infoFont}>
-                    {datum.timeOut ?? "None"}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        ))}
-      </Grid>
-    </Grid>
+    )
   );
 }

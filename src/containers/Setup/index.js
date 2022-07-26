@@ -2,7 +2,7 @@ import React from "react";
 import { TCP } from "tcp-comm";
 import { Button } from "@mui/material";
 
-const TCPComm = () => {
+const Setup = () => {
   const lel = async () => {
     await TCP.sendMessage({ value: "lele" });
   };
@@ -14,4 +14,4 @@ const TCPComm = () => {
   );
 };
 
-export default TCPComm;
+export default Setup;
