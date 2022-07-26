@@ -34,7 +34,7 @@ export default function TodaysReport() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return true ? (
+  return loading ? (
     <Progress color={"info"} />
   ) : (
     <Grid container justifyContent="center">
