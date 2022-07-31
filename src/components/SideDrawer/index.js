@@ -44,7 +44,7 @@ export default function SideDrawer({
     {
       text: "Users List",
       icon: <GroupOutlined />,
-      path: "#",
+      path: "/users",
     },
     {
       text: "New User",
