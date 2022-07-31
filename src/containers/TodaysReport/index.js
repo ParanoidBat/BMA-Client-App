@@ -1,17 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
-import {
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-  Chip,
-  Alert,
-} from "@mui/material";
+import { Grid, Typography, Card, CardContent, Chip } from "@mui/material";
 import { AuthContext } from "contexts/authContext";
 import axios from "axios";
 import Progress from "components/Progress";
 
 import styles from "./styles";
+import ErrorAlert from "components/ErrorAlert";
 
 export default function TodaysReport() {
   const [report, setReport] = useState();
@@ -95,15 +89,7 @@ export default function TodaysReport() {
           </Card>
         ))}
       </Grid>
-      {error && (
-        <Alert
-          severity="error"
-          sx={styles.alert}
-          onClose={() => setError(null)}
-        >
-          {error}
-        </Alert>
-      )}
+      {error && <ErrorAlert error={error} setError={setError} />}
     </Grid>
   );
 }

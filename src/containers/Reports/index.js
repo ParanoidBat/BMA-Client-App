@@ -4,7 +4,6 @@ import {
   Tabs,
   Grid,
   Chip,
-  Alert,
   Typography,
   Card,
   CardContent,
@@ -15,6 +14,7 @@ import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
+import ErrorAlert from "components/ErrorAlert";
 
 import styles from "./styles";
 
@@ -227,15 +227,7 @@ export default function Reports() {
           </Grid>
         </>
       )}
-      {error && (
-        <Alert
-          severity="error"
-          sx={styles.alert}
-          onClose={() => setError(null)}
-        >
-          {error}
-        </Alert>
-      )}
+      {error && <ErrorAlert error={error} setError={setError} />}
     </Grid>
   );
 }

@@ -3,12 +3,12 @@ import {
   Grid,
   TextField,
   Button,
-  Alert,
   CircularProgress,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import styles from "./styles";
+import ErrorAlert from "components/ErrorAlert";
 
 export default function OrgSignup({ setOrganizationID }) {
   const [data, setData] = useState({});
@@ -106,15 +106,7 @@ export default function OrgSignup({ setOrganizationID }) {
           </Button>
         )}
       </Grid>
-      {error && (
-        <Alert
-          severity="error"
-          sx={styles.alert}
-          onClose={() => setError(null)}
-        >
-          {error}
-        </Alert>
-      )}
+      {error && <ErrorAlert error={error} setError={setError} />}
     </Grid>
   );
 }

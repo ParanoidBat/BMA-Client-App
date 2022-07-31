@@ -7,7 +7,6 @@ import {
   TextField,
   InputAdornment,
   IconButton,
-  Alert,
   CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -15,6 +14,7 @@ import axios from "axios";
 import styles from "./styles";
 import { AuthContext } from "contexts/authContext";
 import { Storage } from "@capacitor/storage";
+import ErrorAlert from "components/ErrorAlert";
 
 export default function Login({ setFirstPage }) {
   const [credentials, setCredentials] = useState({});
@@ -143,15 +143,7 @@ export default function Login({ setFirstPage }) {
           </Button>
         </Grid>
       </Grid>
-      {loginError && (
-        <Alert
-          severity="error"
-          onClose={() => setLoginError(false)}
-          sx={styles.alert}
-        >
-          {loginError}
-        </Alert>
-      )}
+      {loginError && <ErrorAlert error={loginError} setError={setLoginError} />}
     </Grid>
   );
 }

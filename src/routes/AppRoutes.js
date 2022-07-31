@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Setup from "containers/Setup";
 import TodaysReport from "containers/TodaysReport";
 import Reports from "containers/Reports";
+import Users from "containers/Users";
 
 export default function AppRoutes() {
   return (
@@ -10,6 +11,7 @@ export default function AppRoutes() {
       <Route path="/" element={<TodaysReport />} />
       <Route path="/setup" element={<Setup />} />
       <Route path="/reports" element={<Reports />} />
+      <Route path="/users" element={<Users />} />
     </Routes>
   );
 }

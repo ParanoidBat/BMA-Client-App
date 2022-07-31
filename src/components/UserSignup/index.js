@@ -4,7 +4,6 @@ import {
   Typography,
   TextField,
   CircularProgress,
-  Alert,
   InputAdornment,
   IconButton,
   Button,
@@ -13,6 +12,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 
 import styles from "./styles";
+import ErrorAlert from "components/ErrorAlert";
 
 export default function UserSignup({ organizationID, setFirstPage }) {
   const [data, setData] = useState({});
@@ -141,15 +141,7 @@ export default function UserSignup({ organizationID, setFirstPage }) {
           </Button>
         )}
       </Grid>
-      {error && (
-        <Alert
-          severity="error"
-          sx={styles.alert}
-          onClose={() => setError(null)}
-        >
-          {error}
-        </Alert>
-      )}
+      {error && <ErrorAlert error={error} setError={setError} />}
     </Grid>
   );
 }

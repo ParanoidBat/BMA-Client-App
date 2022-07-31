@@ -5,10 +5,6 @@ const styles = {
       marginBottom: "5px",
     },
   },
-  alert: {
-    position: "absolute",
-    bottom: "10px",
-  },
 };
 
 export default styles;
