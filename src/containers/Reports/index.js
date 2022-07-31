@@ -11,6 +11,7 @@ import {
   Input,
   Button,
 } from "@mui/material";
+import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
@@ -19,18 +20,28 @@ import styles from "./styles";
 
 export default function Reports() {
   const [value, setValue] = useState(0);
-  const [reports, setReports] = useState();
+  const [reports, setReports] = useState({
+    data: [],
+  });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState({});
+  const [page, setPage] = useState(1);
 
   const { authObject } = useContext(AuthContext);
 
   useEffect(() => {
-    getReports(value);
-  }, [value]);
+    getReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, page]);
 
   const ranges = ["weekly", "monthly", "3 months", "custom"];
+
+  const handleTabChange = (event, value) => {
+    setValue(value);
+    setPage(1);
+    setReports({ data: [] });
+  };
 
   const handleDateChange = (e) => {
     setDates((prev) => ({
@@ -39,7 +50,7 @@ export default function Reports() {
     }));
   };
 
-  const getReports = (value) => {
+  const getReports = () => {
     let reportFor = ranges[value];
     if (reportFor === "3 months") reportFor = "three";
     if (reportFor === "custom") {
@@ -47,12 +58,11 @@ export default function Reports() {
         setError("Select Both Dates");
         return;
       }
-
       setLoading(true);
 
       axios
         .post(
-          `https://bma-api-v1.herokuapp.com/report/${reportFor}/${authObject.orgID}?page=1`,
+          `https://bma-api-v1.herokuapp.com/report/${reportFor}/${authObject.orgID}?page=${page}`,
           {
             from: dates.from,
             to: dates.to,
@@ -61,7 +71,12 @@ export default function Reports() {
         .then((res) => {
           if (res.data.error) setError(res.data.error);
           else {
-            setReports(res.data);
+            setReports((prev) => ({
+              data: [...prev.data, ...res.data.data],
+              percentageAttendance: res.data.percentageAttendance,
+              page: res.data.page,
+              count: res.data.count,
+            }));
             setLoading(false);
           }
         })
@@ -69,12 +84,17 @@ export default function Reports() {
     } else {
       axios
         .get(
-          `https://bma-api-v1.herokuapp.com/report/${reportFor}/${authObject.orgID}?page=1`
+          `https://bma-api-v1.herokuapp.com/report/${reportFor}/${authObject.orgID}?page=${page}`
         )
         .then((res) => {
           if (res.data.error) setError(res.data.error);
           else {
-            setReports(res.data);
+            setReports((prev) => ({
+              data: [...prev.data, ...res.data.data],
+              percentageAttendance: res.data.percentageAttendance,
+              page: res.data.page,
+              count: res.data.count,
+            }));
             setLoading(false);
           }
         })
@@ -84,12 +104,7 @@ export default function Reports() {
 
   return (
     <Grid container justifyContent={"center"}>
-      <Tabs
-        value={value}
-        onChange={(event, value) => {
-          setValue(value);
-        }}
-      >
+      <Tabs value={value} onChange={handleTabChange} sx={styles.fixedTabs}>
         {ranges.map((range, index) => {
           return <Tab label={range} key={`${range}-${index}`} />;
         })}
@@ -130,7 +145,7 @@ export default function Reports() {
           </Grid>
         </Grid>
       )}
-      {true ? (
+      {loading ? (
         <Progress color="info" />
       ) : (
         <>
@@ -202,6 +217,13 @@ export default function Reports() {
                 </CardContent>
               </Card>
             ))}
+            <Button
+              endIcon={<KeyboardArrowDownOutlined />}
+              onClick={() => setPage((prev) => prev + 1)}
+              disabled={reports.data.length === reports.count}
+            >
+              Load More
+            </Button>
           </Grid>
         </>
       )}
