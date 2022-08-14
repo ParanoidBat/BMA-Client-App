@@ -4,6 +4,7 @@ import Setup from "containers/Setup";
 import TodaysReport from "containers/TodaysReport";
 import Reports from "containers/Reports";
 import Users from "containers/Users";
+import UserDetails from "containers/UserDetails";
 
 export default function AppRoutes() {
   return (
