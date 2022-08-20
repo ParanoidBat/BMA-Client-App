@@ -13,6 +13,7 @@ export default function AppRoutes() {
       <Route path="/setup" element={<Setup />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/users" element={<Users />} />
+      <Route path="/users/:id" element={<UserDetails />} />
     </Routes>
   );
 }

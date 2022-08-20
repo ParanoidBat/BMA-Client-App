@@ -12,6 +12,8 @@ import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
 import ErrorAlert from "components/ErrorAlert";
+import Variables from "variables";
+import { NavLink } from "react-router-dom";
 
 export default function Users() {
   const [usersList, setUsersList] = useState({
@@ -28,7 +30,7 @@ export default function Users() {
 
     axios
       .get(
-        `https://bma-api-v1.herokuapp.com/organization/${authObject.orgID}/users?page=${page}`
+        `${Variables.API_URI}/organization/${authObject.orgID}/users?page=${page}`
       )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
@@ -85,7 +87,7 @@ export default function Users() {
           </CardContent>
           <CardActions>
             <Grid container item justifyContent={"space-around"}>
-              <Button>Details</Button>
+              <NavLink to={`/users/${user._id}`}>Details</NavLink>
               <Button
                 color="warning"
                 onClick={() => handleDeleteUser(user._id)}
