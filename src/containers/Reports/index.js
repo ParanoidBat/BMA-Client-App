@@ -1,20 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Tab,
-  Tabs,
-  Grid,
-  Chip,
-  Typography,
-  Card,
-  CardContent,
-  Input,
-  Button,
-} from "@mui/material";
+import { Tab, Tabs, Grid, Typography, Input, Button } from "@mui/material";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
 import ErrorAlert from "components/ErrorAlert";
+import AttendanceCard from "components/AttendanceCard";
+import Variables from "variables";
+import AttendanceChip from "components/AttendanceChip";
 
 import styles from "./styles";
 
@@ -62,7 +55,7 @@ export default function Reports() {
 
       axios
         .post(
-          `https://bma-api-v1.herokuapp.com/report/${reportFor}/${authObject.orgID}?page=${page}`,
+          `${Variables.API_URI}/report/${reportFor}/${authObject.orgID}?page=${page}`,
           {
             from: dates.from,
             to: dates.to,
@@ -84,7 +77,7 @@ export default function Reports() {
     } else {
       axios
         .get(
-          `https://bma-api-v1.herokuapp.com/report/${reportFor}/${authObject.orgID}?page=${page}`
+          `${Variables.API_URI}/report/${reportFor}/${authObject.orgID}?page=${page}`
         )
         .then((res) => {
           if (res.data.error) setError(res.data.error);
@@ -138,7 +131,7 @@ export default function Reports() {
               variant="contained"
               color="info"
               size="small"
-              onClick={() => getReports(3)}
+              onClick={() => getReports()}
             >
               Get
             </Button>
@@ -149,73 +142,12 @@ export default function Reports() {
         <Progress color="info" />
       ) : (
         <>
-          <Grid item sx={styles.chipGrid}>
-            <Chip
-              label={`Attendance ${reports.percentageAttendance}%`}
-              color={
-                reports.percentageAttendance >= 80
-                  ? "success"
-                  : reports.percentageAttendance >= 50
-                  ? "info"
-                  : "error"
-              }
-              sx={styles.chip}
-            />
+          <Grid item>
+            <AttendanceChip percentage={reports.percentageAttendance} />
           </Grid>
           <Grid container item direction="column">
             {reports.data.map((report, index) => (
-              <Card key={`${report.userName}-${index}`} sx={styles.card}>
-                <CardContent>
-                  <Typography
-                    component="div"
-                    align="center"
-                    gutterBottom
-                    sx={styles.userName}
-                  >
-                    {report.userName}
-                  </Typography>
-                  <Grid container item>
-                    <Grid item xs={4}>
-                      <Typography style={{ ...styles.infoFont }}>
-                        Date
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography sx={styles.infoFont}>
-                        {report.date}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container item>
-                    <Grid item xs={4}>
-                      <Typography
-                        style={{ ...styles.checkInColor, ...styles.infoFont }}
-                      >
-                        CheckIn
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography sx={styles.infoFont}>
-                        {report.timeIn}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container item>
-                    <Grid item xs={4}>
-                      <Typography
-                        style={{ ...styles.checkOutColor, ...styles.infoFont }}
-                      >
-                        CheckOut
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography sx={styles.infoFont}>
-                        {report.timeOut ?? "None"}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
+              <AttendanceCard report={report} index={index} />
             ))}
             <Button
               endIcon={<KeyboardArrowDownOutlined />}

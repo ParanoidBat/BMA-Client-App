@@ -1,11 +1,4 @@
 const styles = {
-  chipGrid: {
-    margin: "5px 0px",
-  },
-  chip: {
-    fontSize: "1.5rem",
-    padding: "0px 5px",
-  },
   card: {
     marginBottom: "5px",
     backgroundColor: "#f7f7f7",
