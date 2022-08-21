@@ -7,8 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import styles from "./styles";
 import ErrorAlert from "components/ErrorAlert";
+import Variables from "variables";
+import styles from "./styles";
 
 export default function OrgSignup({ setOrganizationID }) {
   const [data, setData] = useState({});
@@ -32,17 +33,17 @@ export default function OrgSignup({ setOrganizationID }) {
     setLoading(true);
 
     return axios
-      .post("https://bma-api-v1.herokuapp.com/organization", {
+      .post(`${Variables.API_URI}/organization`, {
         name: data.name,
         address: data.address,
         phone: data.phone,
         email: data.email,
       })
       .then((res) => {
-        setLoading(false);
         setOrganizationID(res.data.data._id);
       })
-      .catch((err) => setError(err));
+      .catch((err) => setError(err))
+      .finally(setLoading(false));
   };
 
   return (

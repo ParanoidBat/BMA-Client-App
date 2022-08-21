@@ -9,10 +9,11 @@ import {
   Button,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import ErrorAlert from "components/ErrorAlert";
+import Variables from "variables";
 import axios from "axios";
 
 import styles from "./styles";
-import ErrorAlert from "components/ErrorAlert";
 
 export default function UserSignup({ organizationID, setFirstPage }) {
   const [data, setData] = useState({});
@@ -37,7 +38,7 @@ export default function UserSignup({ organizationID, setFirstPage }) {
     setLoading(true);
 
     return axios
-      .post("https://bma-api-v1.herokuapp.com/user", {
+      .post(`${Variables.API_URI}/user`, {
         name: data.name,
         phone: data.phone,
         address: data.address,

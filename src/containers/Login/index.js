@@ -11,10 +11,11 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
-import styles from "./styles";
 import { AuthContext } from "contexts/authContext";
 import { Storage } from "@capacitor/storage";
 import ErrorAlert from "components/ErrorAlert";
+import Variables from "variables";
+import styles from "./styles";
 
 export default function Login({ setFirstPage }) {
   const [credentials, setCredentials] = useState({});
@@ -48,7 +49,7 @@ export default function Login({ setFirstPage }) {
     setLoading(true);
 
     axios
-      .post("https://bma-api-v1.herokuapp.com/login", {
+      .post(`${Variables.API_URI}/login`, {
         email: credentials.email,
         password: credentials.password,
       })
