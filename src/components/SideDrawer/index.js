@@ -49,7 +49,7 @@ export default function SideDrawer({
     {
       text: "New User",
       icon: <PersonAddAltOutlined />,
-      path: "#",
+      path: "/create-user",
     },
   ];
 

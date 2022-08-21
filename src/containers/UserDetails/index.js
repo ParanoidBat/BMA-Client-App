@@ -26,29 +26,6 @@ export default function UserDetails() {
       .catch((error) => setError(error));
   });
 
-  const handleUpdate = () => {
-    setLoading(true);
-    axios
-      .put(`${Variables.API_URI}/user/${id}`, {
-        ...userData,
-      })
-      .then((res) => {
-        if (res.date.error) setError(res.data.error);
-        else setData(res.data.data);
-      })
-      .catch((error) => setError(error))
-      .finally(setLoading(false));
-  };
-
-  const handleChange = (e) => {
-    setUserData((prev) =>
-      setUserData({
-        ...prev,
-        [e.target.name]: e.target.value,
-      })
-    );
-  };
-
   const roles = [
     {
       value: "Admin",
@@ -63,6 +40,24 @@ export default function UserDetails() {
       label: "Manager",
     },
   ];
+
+  const handleUpdate = () => {
+    setLoading(true);
+    axios
+      .put(`${Variables.API_URI}/user/${id}`, {
+        ...userData,
+      })
+      .then((res) => {
+        if (res.data.error) setError(res.data.error);
+        else setData(res.data.data);
+      })
+      .catch((error) => setError(error))
+      .finally(setLoading(false));
+  };
+
+  const handleChange = (e) => {
+    setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   return (
     data && (
@@ -159,7 +154,7 @@ export default function UserDetails() {
             )}
           </Grid>
         </Grid>
-        {error && <ErrorAlert error={error} setError={() => setError(null)} />}
+        {error && <ErrorAlert error={error} setError={setError} />}
       </Grid>
     )
   );
