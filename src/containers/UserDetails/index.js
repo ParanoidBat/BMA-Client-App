@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import Variables from "variables";
 import Progress from "components/Progress";
 import ErrorAlert from "components/ErrorAlert";
 import { Grid, Typography, TextField, MenuItem, Button } from "@mui/material";
+
+import styles from "./styles";
 
 export default function UserDetails() {
   const [data, setData] = useState();
@@ -138,8 +140,10 @@ export default function UserDetails() {
           </TextField>
         </Grid>
         <Grid container item xs={12} justifyContent="space-around">
-          <Grid item xs={4}>
-            <Button>Report</Button>
+          <Grid item xs={4} sx={styles.linkGrid}>
+            <NavLink style={styles.link} to={`/users/${id}/report`}>
+              Report
+            </NavLink>
           </Grid>
           <Grid item xs={4}>
             {loading ? (

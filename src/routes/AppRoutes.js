@@ -5,6 +5,7 @@ import TodaysReport from "containers/TodaysReport";
 import Reports from "containers/Reports";
 import Users from "containers/Users";
 import UserDetails from "containers/UserDetails";
+import UserReport from "containers/UserReport";
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
       <Route path="/reports" element={<Reports />} />
       <Route path="/users" element={<Users />} />
       <Route path="/users/:id" element={<UserDetails />} />
+      <Route path="/users/:id/report" element={<UserReport />} />
     </Routes>
   );
 }

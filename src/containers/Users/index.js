@@ -15,6 +15,8 @@ import ErrorAlert from "components/ErrorAlert";
 import Variables from "variables";
 import { NavLink } from "react-router-dom";
 
+import styles from "./styles";
+
 export default function Users() {
   const [usersList, setUsersList] = useState({
     data: [],
@@ -87,7 +89,9 @@ export default function Users() {
           </CardContent>
           <CardActions>
             <Grid container item justifyContent={"space-around"}>
-              <NavLink to={`/users/${user._id}`}>Details</NavLink>
+              <NavLink style={styles.link} to={`/users/${user._id}`}>
+                Details
+              </NavLink>
               <Button
                 color="warning"
                 onClick={() => handleDeleteUser(user._id)}
