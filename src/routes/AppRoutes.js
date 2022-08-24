@@ -8,6 +8,7 @@ import UserDetails from "containers/UserDetails";
 import UserReport from "containers/UserReport";
 import CreateUser from "containers/CreateUser";
 import Settings from "containers/Settings";
+import Leaves from "containers/Leaves";
 
 export default function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ export default function AppRoutes() {
       <Route path="/users/:id/report" element={<UserReport />} />
       <Route path="/create-user" element={<CreateUser />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/leaves" element={<Leaves />} />
     </Routes>
   );
 }

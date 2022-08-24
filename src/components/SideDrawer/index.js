@@ -51,6 +51,11 @@ export default function SideDrawer({
       icon: <PersonAddAltOutlined />,
       path: "/create-user",
     },
+    {
+      text: "Leave Requests",
+      icon: <PersonAddAltOutlined />,
+      path: "/leaves",
+    },
   ];
 
   const miscellaneousLinks = [
