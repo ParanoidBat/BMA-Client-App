@@ -57,7 +57,7 @@ export default function SideDrawer({
     {
       text: "Settings",
       icon: <SettingsOutlined />,
-      path: "#",
+      path: "/settings",
     },
     {
       text: "Setup",
