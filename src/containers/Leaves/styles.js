@@ -11,6 +11,12 @@ const styles = {
     fontWeight: "bold",
     borderRadius: "10px",
   },
+  chipsContainer: {
+    marginBottom: "0.8rem",
+  },
+  cardMargin: {
+    marginBottom: "0.5rem",
+  },
 };
 
 export default styles;

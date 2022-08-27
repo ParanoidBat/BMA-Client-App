@@ -10,6 +10,7 @@ import {
   SettingsOutlined,
   PhonelinkSetup,
   LogoutOutlined,
+  SickOutlined,
 } from "@mui/icons-material";
 import { AuthContext } from "contexts/authContext";
 import styles from "./styles";
@@ -53,7 +54,7 @@ export default function SideDrawer({
     },
     {
       text: "Leave Requests",
-      icon: <PersonAddAltOutlined />,
+      icon: <SickOutlined />,
       path: "/leaves",
     },
   ];

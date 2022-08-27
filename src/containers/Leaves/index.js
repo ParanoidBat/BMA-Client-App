@@ -6,6 +6,7 @@ import {
   CardActions,
   Typography,
   Button,
+  Chip,
 } from "@mui/material";
 import Variables from "variables";
 import axios from "axios";
@@ -25,12 +26,15 @@ export default function Leaves() {
   const { authObject } = useContext(AuthContext);
 
   useEffect(() => {
+    let query;
+    if (authObject.role !== "Worker") {
+      query = `${Variables.API_URI}/leave?id=${authObject.orgID}${
+        status ? `&status=${status}` : ""
+      }`;
+    } else query = `${Variables.API_URI}/leave/${authObject.id}`;
+
     axios
-      .get(
-        `${Variables.API_URI}/leave?id=${authObject.orgID}${
-          status ? `&status=${status}` : ""
-        }`
-      )
+      .get(query)
       .then((res) => {
         setLeaves(res.data.data);
       })
@@ -71,12 +75,33 @@ export default function Leaves() {
       .catch((error) => setError(error));
   };
 
+  const handleChipClick = (state) => {
+    if (state === status) setStatus("");
+    else setStatus(state);
+  };
+
   return loading ? (
     <Progress color={"info"} />
   ) : (
     <Grid container direction={"column"}>
+      <Grid
+        container
+        item
+        justifyContent={"space-evenly"}
+        sx={styles.chipsContainer}
+      >
+        {["Pending", "Accepted", "Rejected"].map((state, index) => (
+          <Chip
+            key={`${state}-${index}`}
+            label={state}
+            color="primary"
+            variant={status === state ? "filled" : "outlined"}
+            onClick={() => handleChipClick(state)}
+          />
+        ))}
+      </Grid>
       {leaves?.map((leave, index) => (
-        <Card key={index}>
+        <Card key={index} sx={styles.cardMargin}>
           <CardContent>
             <Typography
               variant="h5"
@@ -117,30 +142,32 @@ export default function Leaves() {
               {leave.status}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Grid container item justifyContent={"space-around"}>
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="success"
-                  disabled={leave.status !== "Pending"}
-                  onClick={() => handleButtonClick("Accepted", leave._id)}
-                >
-                  Accept
-                </Button>
+          {authObject.role !== "Worker" && (
+            <CardActions>
+              <Grid container item justifyContent={"space-around"}>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    disabled={leave.status !== "Pending"}
+                    onClick={() => handleButtonClick("Accepted", leave._id)}
+                  >
+                    Accept
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    disabled={leave.status !== "Pending"}
+                    onClick={() => handleButtonClick("Rejected", leave._id)}
+                  >
+                    Reject
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="error"
-                  disabled={leave.status !== "Pending"}
-                  onClick={() => handleButtonClick("Rejected", leave._id)}
-                >
-                  Reject
-                </Button>
-              </Grid>
-            </Grid>
-          </CardActions>
+            </CardActions>
+          )}
         </Card>
       ))}
       {error && <ErrorAlert error={error} setError={setError} />}

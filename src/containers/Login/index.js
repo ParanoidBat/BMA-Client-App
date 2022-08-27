@@ -72,6 +72,7 @@ export default function Login({ setFirstPage }) {
           token: data.token,
           id: data.id,
           orgID: data.orgID,
+          role: data.role,
         });
       })
       .catch((err) => {
