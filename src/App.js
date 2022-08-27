@@ -17,7 +17,6 @@ import Signup from "containers/Signup";
 
 export default function App() {
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [appBarTitle, setAppBarTitle] = useState("Today's Report");
   const [firstPage, setFirstPage] = useState("Login");
 
   const { authObject } = useContext(AuthContext);
@@ -43,7 +42,7 @@ export default function App() {
                   <MenuIcon sx={{ color: "white" }} />
                 </IconButton>
                 <Typography component="div" variant="h6">
-                  {appBarTitle}
+                  BMA
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -51,7 +50,6 @@ export default function App() {
             <SideDrawer
               open={openDrawer}
               handleClose={handleClose}
-              setAppBarTitle={setAppBarTitle}
               setFirstPage={setFirstPage}
             />
             <div style={{ padding: "10px" }}>

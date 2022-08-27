@@ -9,6 +9,9 @@ const styles = {
     display: "flex",
     justifyContent: "space-around",
   },
+  Icon: {
+    marginRight: "0.3rem",
+  },
 };
 
 export default styles;

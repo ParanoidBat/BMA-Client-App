@@ -15,12 +15,7 @@ import {
 import { AuthContext } from "contexts/authContext";
 import styles from "./styles";
 
-export default function SideDrawer({
-  open,
-  handleClose,
-  setAppBarTitle,
-  setFirstPage,
-}) {
+export default function SideDrawer({ open, handleClose, setFirstPage }) {
   const { setAuthObject } = useContext(AuthContext);
 
   const logout = () => {
@@ -46,11 +41,6 @@ export default function SideDrawer({
       text: "Users List",
       icon: <GroupOutlined />,
       path: "/users",
-    },
-    {
-      text: "New User",
-      icon: <PersonAddAltOutlined />,
-      path: "/create-user",
     },
     {
       text: "Leave Requests",
@@ -82,9 +72,10 @@ export default function SideDrawer({
       <List onClick={() => handleClose()}>
         {reportLinks.map((report, index) => (
           <ListItem key={`report-${index}`}>
-            <ListItemButton onClick={() => setAppBarTitle(report.text)}>
+            <ListItemButton>
               <NavLink to={report.path} style={styles.Link}>
-                {report.icon} {report.text}
+                <span style={styles.Icon}>{report.icon}</span>
+                {report.text}
               </NavLink>
             </ListItemButton>
           </ListItem>
@@ -92,9 +83,10 @@ export default function SideDrawer({
         <Divider />
         {userLinks.map((user, index) => (
           <ListItem key={`user-${index}`}>
-            <ListItemButton onClick={() => setAppBarTitle(user.text)}>
+            <ListItemButton>
               <NavLink to={user.path} style={styles.Link}>
-                {user.icon} {user.text}
+                <span style={styles.Icon}>{user.icon}</span>
+                {user.text}
               </NavLink>
             </ListItemButton>
           </ListItem>
@@ -102,9 +94,10 @@ export default function SideDrawer({
         <Divider />
         {miscellaneousLinks.map((misc, index) => (
           <ListItem key={`misc-${index}`}>
-            <ListItemButton onClick={() => setAppBarTitle(misc.text)}>
+            <ListItemButton>
               <NavLink to={misc.path} style={styles.Link}>
-                {misc.icon} {misc.text}
+                <span style={styles.Icon}>{misc.icon}</span>
+                {misc.text}
               </NavLink>
             </ListItemButton>
           </ListItem>
@@ -113,7 +106,10 @@ export default function SideDrawer({
         <ListItem>
           <ListItemButton onClick={logout}>
             <span style={styles.Link}>
-              <LogoutOutlined /> Logout
+              <span style={styles.Icon}>
+                <LogoutOutlined />
+              </span>
+              Logout
             </span>
           </ListItemButton>
         </ListItem>
