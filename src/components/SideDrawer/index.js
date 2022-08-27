@@ -42,7 +42,7 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
       path: "/users",
     },
     {
-      text: "Leave Requests",
+      text: "Leaves Request",
       icon: <SickOutlined />,
       path: "/leaves",
     },

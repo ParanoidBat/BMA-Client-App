@@ -6,6 +6,8 @@ import {
   Card,
   CardContent,
   CardActions,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 import { KeyboardArrowDownOutlined, AddOutlined } from "@mui/icons-material";
 import axios from "axios";
@@ -14,6 +16,7 @@ import Progress from "components/Progress";
 import ErrorAlert from "components/ErrorAlert";
 import Variables from "variables";
 import { NavLink, Link } from "react-router-dom";
+import InputModal from "components/InputModal";
 
 import styles from "./styles";
 
@@ -21,9 +24,11 @@ export default function Users() {
   const [usersList, setUsersList] = useState({
     data: [],
   });
+  const [userData, setUserData] = useState({});
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const { authObject } = useContext(AuthContext);
 
@@ -50,6 +55,46 @@ export default function Users() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  const roles = [
+    {
+      value: "Admin",
+      label: "Admin",
+    },
+    {
+      value: "Worker",
+      label: "Worker",
+    },
+    {
+      value: "Manager",
+      label: "Manager",
+    },
+  ];
+
+  const validateInput = () => {
+    if (!userData.name || userData.name.startsWith(" ")) {
+      setError("Invalid Name");
+      return false;
+    }
+    if (!userData.authID || userData.authID < 0) {
+      setError("Invalid Finger ID");
+      return false;
+    }
+    if (userData.salary && userData.salary < 0) {
+      setError("Invalid Salary");
+      return false;
+    }
+    if (!userData.phone || userData.phone.startsWith(" ")) {
+      setError("Invalid Phone Number");
+      return false;
+    }
+    if (!userData.password) {
+      setError("Invalid Password");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleDeleteUser = (id) => {
     axios
       .delete(`https://bma-api-v1.herokuapp.com/user/${id}`)
@@ -66,6 +111,29 @@ export default function Users() {
         }
       })
       .catch((error) => setError(error));
+  };
+
+  const handleChange = (e) => {
+    setUserData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSave = () => {
+    if (!validateInput()) return;
+
+    axios
+      .post(`${Variables.API_URI}/user/`, {
+        ...userData,
+        organizationID: authObject.orgID,
+      })
+      .then((res) => {
+        if (res.data.error) setError(res.data.error);
+        setUserData({});
+      })
+      .catch((error) => setError(error))
+      .finally(setOpenModal(false));
   };
 
   return loading ? (
@@ -116,11 +184,109 @@ export default function Users() {
         variant="contained"
         color="primary"
         sx={styles.fab}
-        component={Link}
-        to="/create-user"
+        onClick={() => setOpenModal(true)}
       >
         <AddOutlined fontSize="large" />
       </Button>
+      {openModal && (
+        <InputModal header={"New User"} onClose={() => setOpenModal(false)}>
+          <Grid
+            container
+            item
+            sx={{
+              "& *": {
+                marginBottom: "3px",
+              },
+            }}
+          >
+            <TextField
+              fullWidth
+              name="name"
+              required
+              type={"text"}
+              value={userData.name ?? ""}
+              onChange={handleChange}
+              label="name"
+            />
+            <TextField
+              fullWidth
+              name="authID"
+              required
+              type={"number"}
+              value={userData.authID ?? ""}
+              onChange={handleChange}
+              label="finger ID"
+            />
+            <TextField
+              fullWidth
+              name="salary"
+              type={"number"}
+              value={userData.salary ?? ""}
+              label="salary"
+              onChange={handleChange}
+              inputProps={{
+                min: 0,
+              }}
+              InputProps={{
+                startAdornment: <span style={{ marginRight: "5px" }}>Rs.</span>,
+              }}
+            />
+            <TextField
+              fullWidth
+              name="phone"
+              required
+              type={"tel"}
+              value={userData.phone ?? ""}
+              onChange={handleChange}
+              label="phone"
+            />
+            <TextField
+              fullWidth
+              name="email"
+              type={"email"}
+              value={userData.email ?? ""}
+              onChange={handleChange}
+              label="email"
+            />
+            <TextField
+              fullWidth
+              name="password"
+              required
+              type={"password"}
+              value={userData.password ?? ""}
+              onChange={handleChange}
+              label="password"
+            />
+            <TextField
+              fullWidth
+              name="address"
+              type={"text"}
+              value={userData.address ?? ""}
+              label="address"
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              select
+              value={userData.role ?? ""}
+              name="role"
+              label="role"
+              onChange={handleChange}
+            >
+              {roles.map((role) => (
+                <MenuItem key={role.value} value={role.value}>
+                  {role.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Grid item xs={4}>
+              <Button variant="contained" color="success" onClick={handleSave}>
+                Save
+              </Button>
+            </Grid>
+          </Grid>
+        </InputModal>
+      )}
     </>
   );
 }
