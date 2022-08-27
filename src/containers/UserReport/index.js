@@ -45,7 +45,7 @@ export default function UserReport() {
 
     axios
       .post(
-        `${Variables.API_URI}/report/user/${authObject.orgID}/${id}?page=${page}`,
+        `${Variables.API_URI}/report/user/${authObject.user.organizationID}/${id}?page=${page}`,
         {
           from: dates.from,
           to: dates.to,

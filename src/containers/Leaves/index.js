@@ -32,11 +32,11 @@ export default function Leaves() {
 
   useEffect(() => {
     let query;
-    if (authObject.role !== "Worker") {
-      query = `${Variables.API_URI}/leave?id=${authObject.orgID}${
+    if (authObject.user.role !== "Worker") {
+      query = `${Variables.API_URI}/leave?id=${authObject.user.organizationID}${
         status ? `&status=${status}` : ""
       }`;
-    } else query = `${Variables.API_URI}/leave/${authObject.id}`;
+    } else query = `${Variables.API_URI}/leave/${authObject.user._id}`;
 
     axios
       .get(query)
@@ -95,8 +95,8 @@ export default function Leaves() {
   const handleApplyButton = () => {
     axios
       .post(`${Variables.API_URI}/leave`, {
-        userID: authObject.id,
-        orgID: authObject.orgID,
+        userID: authObject.user._id,
+        orgID: authObject.user.organizationID,
         from: dates.from,
         to: dates.to,
       })
@@ -167,7 +167,7 @@ export default function Leaves() {
                 {leave.status}
               </Typography>
             </CardContent>
-            {authObject.role !== "Worker" && (
+            {authObject.user.role !== "Worker" && (
               <CardActions>
                 <Grid container item justifyContent={"space-around"}>
                   <Grid item>
@@ -197,7 +197,7 @@ export default function Leaves() {
         ))}
         {error && <ErrorAlert error={error} setError={setError} />}
       </Grid>
-      {authObject.role !== "Admin" && leaves.length <= 1 && (
+      {authObject.user.role !== "Admin" && leaves.length <= 1 && (
         <Button
           variant="contained"
           color="primary"

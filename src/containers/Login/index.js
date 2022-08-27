@@ -68,14 +68,12 @@ export default function Login({ setFirstPage }) {
 
         await Storage.set({
           key: "OrgID",
-          value: data.orgID,
+          value: data.user.organizationID,
         });
 
         setAuthObject({
           token: data.token,
-          id: data.id,
-          orgID: data.orgID,
-          role: data.role,
+          user: data.user,
         });
       })
       .catch((err) => {

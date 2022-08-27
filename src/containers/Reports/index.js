@@ -55,7 +55,7 @@ export default function Reports() {
 
       axios
         .post(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.orgID}?page=${page}`,
+          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=${page}`,
           {
             from: dates.from,
             to: dates.to,
@@ -77,7 +77,7 @@ export default function Reports() {
     } else {
       axios
         .get(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.orgID}?page=${page}`
+          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=${page}`
         )
         .then((res) => {
           if (res.data.error) setError(res.data.error);

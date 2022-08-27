@@ -15,7 +15,7 @@ import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
 import ErrorAlert from "components/ErrorAlert";
 import Variables from "variables";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import InputModal from "components/InputModal";
 
 import styles from "./styles";
@@ -37,7 +37,7 @@ export default function Users() {
 
     axios
       .get(
-        `${Variables.API_URI}/organization/${authObject.orgID}/users?page=${page}`
+        `${Variables.API_URI}/organization/${authObject.user.organizationID}/users?page=${page}`
       )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
@@ -126,7 +126,7 @@ export default function Users() {
     axios
       .post(`${Variables.API_URI}/user/`, {
         ...userData,
-        organizationID: authObject.orgID,
+        organizationID: authObject.user.organizationID,
       })
       .then((res) => {
         if (res.data.error) setError(res.data.error);

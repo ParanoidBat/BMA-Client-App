@@ -23,7 +23,9 @@ export default function Settings() {
 
   useEffect(() => {
     axios
-      .get(`${Variables.API_URI}/organization/${authObject.orgID}`)
+      .get(
+        `${Variables.API_URI}/organization/${authObject.user.organizationID}`
+      )
       .then((res) => {
         setError(res.data.error);
         setIsSatOff(res.data.data.isSaturdayOff);
@@ -37,9 +39,12 @@ export default function Settings() {
     setLoading(true);
 
     axios
-      .put(`${Variables.API_URI}/organization/${authObject.orgID}`, {
-        isSaturdayOff: isSatOff,
-      })
+      .put(
+        `${Variables.API_URI}/organization/${authObject.user.organizationID}`,
+        {
+          isSaturdayOff: isSatOff,
+        }
+      )
       .then((res) => setError(res.data.error))
       .catch((error) => setError(error))
       .finally(setLoading(false));

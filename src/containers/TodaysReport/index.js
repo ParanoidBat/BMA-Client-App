@@ -17,7 +17,9 @@ export default function TodaysReport() {
 
   useEffect(() => {
     axios
-      .get(`${Variables.API_URI}/report/today/${authObject.orgID}`)
+      .get(
+        `${Variables.API_URI}/report/today/${authObject.user.organizationID}`
+      )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else {
