@@ -65,6 +65,14 @@ export default function CreateUser() {
       setError("Invalid Salary");
       return false;
     }
+    if (!userData.phone || userData.phone.startsWith(" ")) {
+      setError("Invalid Phone Number");
+      return false;
+    }
+    if (!userData.password) {
+      setError("Invalid Password");
+      return false;
+    }
 
     return true;
   };
@@ -114,10 +122,28 @@ export default function CreateUser() {
         <TextField
           fullWidth
           name="phone"
+          required
           type={"tel"}
           value={userData.phone ?? ""}
           onChange={handleChange}
           label="phone"
+        />
+        <TextField
+          fullWidth
+          name="email"
+          type={"email"}
+          value={userData.email ?? ""}
+          onChange={handleChange}
+          label="email"
+        />
+        <TextField
+          fullWidth
+          name="password"
+          required
+          type={"password"}
+          value={userData.password ?? ""}
+          onChange={handleChange}
+          label="password"
         />
         <TextField
           fullWidth

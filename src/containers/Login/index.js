@@ -37,7 +37,7 @@ export default function Login({ setFirstPage }) {
   };
 
   const handleLogin = () => {
-    if (!credentials.email) {
+    if (!credentials.email_phone) {
       setInputError((prev) => ({ ...prev, email: true }));
       return;
     } else if (!credentials.password) {
@@ -48,9 +48,12 @@ export default function Login({ setFirstPage }) {
     setLoginError(null);
     setLoading(true);
 
+    const regex = /@/;
+    let key = regex.test(credentials.email_phone) ? "email" : "phone";
+
     axios
       .post(`${Variables.API_URI}/login`, {
-        email: credentials.email,
+        [key]: credentials.email_phone,
         password: credentials.password,
       })
       .then(async (res) => {
@@ -87,11 +90,10 @@ export default function Login({ setFirstPage }) {
       <Grid container item xs={6} direction={"column"} sx={styles.contentGrid}>
         <TextField
           error={inputError.email}
-          label="Email"
+          label="Email or Phone"
           variant="outlined"
-          type={"email"}
-          name="email"
-          value={credentials?.email}
+          name="email_phone"
+          value={credentials?.email_phone}
           required
           onChange={handleInputChange}
         />

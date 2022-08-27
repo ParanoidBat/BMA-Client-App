@@ -6,7 +6,6 @@ import {
   ArticleOutlined,
   FeedOutlined,
   GroupOutlined,
-  PersonAddAltOutlined,
   SettingsOutlined,
   PhonelinkSetup,
   LogoutOutlined,
