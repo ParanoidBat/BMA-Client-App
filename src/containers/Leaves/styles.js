@@ -17,6 +17,28 @@ const styles = {
   cardMargin: {
     marginBottom: "0.5rem",
   },
+  fab: {
+    padding: "13px 0px",
+    borderRadius: "50%",
+    position: "absolute",
+    bottom: "15px",
+    right: "15px",
+    boxShadow: "-5px 5px 8px #797f8d",
+  },
+  dateGrid: {
+    marginTop: "5px",
+  },
+  input: {
+    borderRadius: "10px",
+    padding: "3px",
+    backgroundColor: "#bcc0bc80",
+  },
+  fontBold: {
+    fontWeight: "bold",
+  },
+  marginTop: {
+    marginTop: "5px",
+  },
 };
 
 export default styles;
