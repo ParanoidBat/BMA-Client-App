@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import Variables from "variables";
 import Progress from "components/Progress";
 import ErrorAlert from "components/ErrorAlert";
 import { Grid, Typography, TextField, MenuItem, Button } from "@mui/material";
+import { AuthContext } from "contexts/authContext";
 
 import styles from "./styles";
 
@@ -25,6 +26,8 @@ export default function UserDetails() {
       })
       .catch((error) => setError(error));
   });
+
+  const { authObject } = useContext(AuthContext);
 
   const roles = [
     {
@@ -81,6 +84,7 @@ export default function UserDetails() {
             type={"number"}
             defaultValue={data.salary}
             label="salary"
+            disabled={authObject.user.role === "Worker"}
             onChange={handleChange}
             inputProps={{
               min: 0,
@@ -94,6 +98,7 @@ export default function UserDetails() {
             name="phone"
             type={"tel"}
             defaultValue={data.phone}
+            disabled={authObject.user.role === "Worker"}
             onChange={handleChange}
             label="phone"
           />
@@ -102,6 +107,7 @@ export default function UserDetails() {
             name="address"
             type={"text"}
             defaultValue={data.address}
+            disabled={authObject.user.role === "Worker"}
             label="address"
             onChange={handleChange}
           />
@@ -110,6 +116,7 @@ export default function UserDetails() {
             name="advance"
             type={"number"}
             defaultValue={data.advance}
+            disabled={authObject.user.role === "Worker"}
             onChange={handleChange}
             label="advance"
             inputProps={{
@@ -125,6 +132,7 @@ export default function UserDetails() {
             value={data.role}
             name="role"
             label="role"
+            disabled={authObject.user.role === "Worker"}
             onChange={handleChange}
           >
             {roles.map((role) => (
@@ -134,25 +142,34 @@ export default function UserDetails() {
             ))}
           </TextField>
         </Grid>
-        <Grid container item xs={12} justifyContent="space-around">
+        <Grid
+          container
+          item
+          xs={12}
+          justifyContent={
+            authObject.user.role !== "Worker" ? "space-around" : "flex-start"
+          }
+        >
           <Grid item xs={4} sx={styles.linkGrid}>
             <NavLink style={styles.link} to={`/users/${id}/report`}>
               Report
             </NavLink>
           </Grid>
-          <Grid item xs={4}>
-            {loading ? (
-              <Progress color={"success"} />
-            ) : (
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleUpdate}
-              >
-                Update
-              </Button>
-            )}
-          </Grid>
+          {authObject.user.role !== "Worker" && (
+            <Grid item xs={4}>
+              {loading ? (
+                <Progress color={"success"} />
+              ) : (
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleUpdate}
+                >
+                  Update
+                </Button>
+              )}
+            </Grid>
+          )}
         </Grid>
         {error && <ErrorAlert error={error} setError={setError} />}
       </Grid>

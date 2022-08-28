@@ -1,6 +1,14 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { Drawer, List, ListItem, ListItemButton, Divider } from "@mui/material";
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
 import {
   ChevronLeftOutlined,
   ArticleOutlined,
@@ -10,12 +18,14 @@ import {
   PhonelinkSetup,
   LogoutOutlined,
   SickOutlined,
+  AccountCircleOutlined,
+  PermIdentityOutlined,
 } from "@mui/icons-material";
 import { AuthContext } from "contexts/authContext";
 import styles from "./styles";
 
 export default function SideDrawer({ open, handleClose, setFirstPage }) {
-  const { setAuthObject } = useContext(AuthContext);
+  const { authObject, setAuthObject } = useContext(AuthContext);
 
   const logout = () => {
     setAuthObject(null);
@@ -67,6 +77,14 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
         sx={styles.ChevronIcon}
         onClick={() => handleClose()}
       />
+      <Grid container direction={"column"} alignItems="center">
+        <Grid item>
+          <AccountCircleOutlined fontSize="large" />
+        </Grid>
+        <Grid item>
+          <Typography sx={styles.userName}>{authObject.user.name}</Typography>
+        </Grid>
+      </Grid>
       <Divider />
       <List onClick={() => handleClose()}>
         {reportLinks.map((report, index) => (
@@ -90,6 +108,18 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
             </ListItemButton>
           </ListItem>
         ))}
+        {authObject.user.role !== "Admin" && (
+          <ListItem>
+            <ListItemButton>
+              <NavLink to={`/users/${authObject.user._id}`} style={styles.Link}>
+                <span style={styles.Icon}>
+                  <PermIdentityOutlined />
+                </span>
+                My Details
+              </NavLink>
+            </ListItemButton>
+          </ListItem>
+        )}
         <Divider />
         {miscellaneousLinks.map((misc, index) => (
           <ListItem key={`misc-${index}`}>

@@ -12,6 +12,9 @@ const styles = {
   Icon: {
     marginRight: "0.3rem",
   },
+  userName: {
+    textOverflow: "ellipsis",
+  },
 };
 
 export default styles;
