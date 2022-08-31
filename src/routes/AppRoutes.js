@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import Setup from "containers/Setup";
 import TodaysReport from "containers/TodaysReport";
@@ -8,18 +8,31 @@ import UserDetails from "containers/UserDetails";
 import UserReport from "containers/UserReport";
 import Settings from "containers/Settings";
 import Leaves from "containers/Leaves";
+import NotFound from "containers/NotFound";
+import { AuthContext } from "contexts/authContext";
 
 export default function AppRoutes() {
+  const { authObject } = useContext(AuthContext);
+
   return (
     <Routes>
       <Route path="/" element={<TodaysReport />} />
-      <Route path="/setup" element={<Setup />} />
-      <Route path="/reports" element={<Reports />} />
-      <Route path="/users" element={<Users />} />
       <Route path="/users/:id" element={<UserDetails />} />
       <Route path="/users/:id/report" element={<UserReport />} />
-      <Route path="/settings" element={<Settings />} />
       <Route path="/leaves" element={<Leaves />} />
+      {authObject.user.role !== "Worker" && (
+        <>
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/users" element={<Users />} />
+          {authObject.user.role === "Admin" && (
+            <>
+              <Route path="/setup" element={<Setup />} />
+              <Route path="/settings" element={<Settings />} />
+            </>
+          )}
+        </>
+      )}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

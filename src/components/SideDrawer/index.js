@@ -87,27 +87,37 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
       </Grid>
       <Divider />
       <List onClick={() => handleClose()}>
-        {reportLinks.map((report, index) => (
-          <ListItem key={`report-${index}`}>
-            <ListItemButton>
-              <NavLink to={report.path} style={styles.Link}>
-                <span style={styles.Icon}>{report.icon}</span>
-                {report.text}
-              </NavLink>
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {reportLinks.map((report, index) => {
+          if (authObject.user.role === "Worker" && report.text === "Reports") {
+            return <></>;
+          }
+          return (
+            <ListItem key={`report-${index}`}>
+              <ListItemButton>
+                <NavLink to={report.path} style={styles.Link}>
+                  <span style={styles.Icon}>{report.icon}</span>
+                  {report.text}
+                </NavLink>
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
         <Divider />
-        {userLinks.map((user, index) => (
-          <ListItem key={`user-${index}`}>
-            <ListItemButton>
-              <NavLink to={user.path} style={styles.Link}>
-                <span style={styles.Icon}>{user.icon}</span>
-                {user.text}
-              </NavLink>
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {userLinks.map((user, index) => {
+          if (authObject.user.role === "Worker" && user.text === "Users List") {
+            return <></>;
+          }
+          return (
+            <ListItem key={`user-${index}`}>
+              <ListItemButton>
+                <NavLink to={user.path} style={styles.Link}>
+                  <span style={styles.Icon}>{user.icon}</span>
+                  {user.text}
+                </NavLink>
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
         {authObject.user.role !== "Admin" && (
           <ListItem>
             <ListItemButton>
@@ -121,16 +131,17 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
           </ListItem>
         )}
         <Divider />
-        {miscellaneousLinks.map((misc, index) => (
-          <ListItem key={`misc-${index}`}>
-            <ListItemButton>
-              <NavLink to={misc.path} style={styles.Link}>
-                <span style={styles.Icon}>{misc.icon}</span>
-                {misc.text}
-              </NavLink>
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {authObject.user.role === "Admin" &&
+          miscellaneousLinks.map((misc, index) => (
+            <ListItem key={`misc-${index}`}>
+              <ListItemButton>
+                <NavLink to={misc.path} style={styles.Link}>
+                  <span style={styles.Icon}>{misc.icon}</span>
+                  {misc.text}
+                </NavLink>
+              </ListItemButton>
+            </ListItem>
+          ))}
         <Divider />
         <ListItem>
           <ListItemButton onClick={logout}>

@@ -115,15 +115,16 @@ export default function Leaves() {
           justifyContent={"space-evenly"}
           sx={styles.chipsContainer}
         >
-          {["Pending", "Accepted", "Rejected"].map((state, index) => (
-            <Chip
-              key={`${state}-${index}`}
-              label={state}
-              color="primary"
-              variant={status === state ? "filled" : "outlined"}
-              onClick={() => handleChipClick(state)}
-            />
-          ))}
+          {authObject.user.role !== "Worker" &&
+            ["Pending", "Accepted", "Rejected"].map((state, index) => (
+              <Chip
+                key={`${state}-${index}`}
+                label={state}
+                color="primary"
+                variant={status === state ? "filled" : "outlined"}
+                onClick={() => handleChipClick(state)}
+              />
+            ))}
         </Grid>
         {leaves?.map((leave, index) => (
           <Card key={index} sx={styles.cardMargin}>
@@ -197,7 +198,7 @@ export default function Leaves() {
         ))}
         {error && <ErrorAlert error={error} setError={setError} />}
       </Grid>
-      {authObject.user.role !== "Admin" && leaves.length <= 1 && (
+      {authObject.user.role !== "Admin" && leaves?.length < 1 && (
         <Button
           variant="contained"
           color="primary"
