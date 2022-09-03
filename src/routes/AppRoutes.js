@@ -9,6 +9,7 @@ import UserReport from "containers/UserReport";
 import Settings from "containers/Settings";
 import Leaves from "containers/Leaves";
 import NotFound from "containers/NotFound";
+import MyDetails from "containers/MyDetails";
 import { AuthContext } from "contexts/authContext";
 
 export default function AppRoutes() {
@@ -17,11 +18,12 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<TodaysReport />} />
-      <Route path="/users/:id" element={<UserDetails />} />
+      <Route path="/users/:id/details" element={<MyDetails />} />
       <Route path="/users/:id/report" element={<UserReport />} />
       <Route path="/leaves" element={<Leaves />} />
       {authObject.user.role !== "Worker" && (
         <>
+          <Route path="/users/:id" element={<UserDetails />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/users" element={<Users />} />
           {authObject.user.role === "Admin" && (

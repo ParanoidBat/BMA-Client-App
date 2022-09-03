@@ -121,7 +121,10 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
         {authObject.user.role !== "Admin" && (
           <ListItem>
             <ListItemButton>
-              <NavLink to={`/users/${authObject.user._id}`} style={styles.Link}>
+              <NavLink
+                to={`/users/${authObject.user._id}/details`}
+                style={styles.Link}
+              >
                 <span style={styles.Icon}>
                   <PermIdentityOutlined />
                 </span>
