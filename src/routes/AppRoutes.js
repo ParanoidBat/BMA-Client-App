@@ -18,7 +18,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<TodaysReport />} />
-      <Route path="/users/:id/details" element={<MyDetails />} />
+      <Route path="/users/:id/:orgID/details" element={<MyDetails />} />
       <Route path="/users/:id/report" element={<UserReport />} />
       <Route path="/leaves" element={<Leaves />} />
       {authObject.user.role !== "Worker" && (

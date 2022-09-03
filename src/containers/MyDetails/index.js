@@ -10,14 +10,23 @@ import styles from "./styles";
 export default function UserDetails() {
   const [data, setData] = useState();
   const [error, setError] = useState(null);
+  const [percentAttendance, setPercentAttendance] = useState(0);
 
-  const { id } = useParams();
+  const { id, orgID } = useParams();
 
   useEffect(() => {
     axios
       .get(`${Variables.API_URI}/user/${id}`)
       .then((res) => {
         setData(res.data.data);
+        setError(res.data.error);
+      })
+      .catch((error) => setError(error));
+
+    axios
+      .get(`${Variables.API_URI}/user/percent_attendance/${id}/${orgID}`)
+      .then((res) => {
+        setPercentAttendance(res.data.data);
         setError(res.data.error);
       })
       .catch((error) => setError(error));
@@ -41,6 +50,14 @@ export default function UserDetails() {
           <Grid item xs={8}>
             <Typography gutterBottom variant="h6">
               Rs.{data.salary}
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="h5">Net Salary</Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <Typography gutterBottom variant="h6">
+              Rs.{(data.salary * percentAttendance) / 100}
             </Typography>
           </Grid>
           <Grid item xs={4}>

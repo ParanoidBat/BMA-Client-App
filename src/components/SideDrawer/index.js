@@ -122,7 +122,7 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
           <ListItem>
             <ListItemButton>
               <NavLink
-                to={`/users/${authObject.user._id}/details`}
+                to={`/users/${authObject.user._id}/${authObject.user.organizationID}/details`}
                 style={styles.Link}
               >
                 <span style={styles.Icon}>
