@@ -37,23 +37,22 @@ export default function Users() {
 
     axios
       .get(
-        `${Variables.API_URI}/organization/${authObject.user.organizationID}/users?page=${page}`
+        `${Variables.API_URI}/organization/${authObject.user.organizationID}/users?page=1`
       )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else {
           setUsersList((prev) => ({
-            data: [...prev.data, ...res.data.data],
-            page: res.data.page,
+            data: res.data.data,
             count: res.data.count,
           }));
-          setLoading(false);
         }
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error))
+      .finally(setLoading(false));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
   const roles = [
     {
@@ -104,9 +103,11 @@ export default function Users() {
           const filteredArray = usersList.data.filter(
             (user) => user._id !== id
           );
+
           setUsersList((prev) => ({
             ...prev,
             data: filteredArray,
+            count: prev.count - 1,
           }));
         }
       })
@@ -134,6 +135,28 @@ export default function Users() {
       })
       .catch((error) => setError(error))
       .finally(setOpenModal(false));
+  };
+
+  const handleLoadMore = () => {
+    setLoading(true);
+
+    axios
+      .get(
+        `${Variables.API_URI}/organization/${
+          authObject.user.organizationID
+        }/users?page=${page + 1}`
+      )
+      .then((res) => {
+        if (res.data.error) setError(res.data.error);
+        else {
+          setUsersList((prev) => ({
+            data: [...prev.data, ...res.data.data],
+          }));
+          setPage(res.data.page);
+        }
+      })
+      .catch((error) => setError(error))
+      .finally(setLoading(false));
   };
 
   return loading ? (
@@ -173,7 +196,7 @@ export default function Users() {
         ))}
         <Button
           endIcon={<KeyboardArrowDownOutlined />}
-          onClick={() => setPage((prev) => prev + 1)}
+          onClick={() => handleLoadMore()}
           disabled={usersList.data.length === usersList.count}
         >
           Load More

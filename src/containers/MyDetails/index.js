@@ -93,9 +93,10 @@ export default function UserDetails() {
             </Typography>
           </Grid>
         </Grid>
-        <Grid item xs={4} sx={styles.button}>
+        <Grid item xs={4}>
           <Button
             variant={"contained"}
+            sx={styles.button}
             onClick={() => navigate(`/users/${id}/report`)}
           >
             Report

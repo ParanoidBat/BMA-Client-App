@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Variables from "variables";
 import Progress from "components/Progress";
@@ -7,15 +7,16 @@ import ErrorAlert from "components/ErrorAlert";
 import { Grid, Typography, TextField, MenuItem, Button } from "@mui/material";
 import { AuthContext } from "contexts/authContext";
 
-import styles from "./styles";
-
 export default function UserDetails() {
   const [data, setData] = useState();
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [percentAttendance, setPercentAttendance] = useState(0);
 
   const { id } = useParams();
+  const { authObject } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -25,9 +26,17 @@ export default function UserDetails() {
         setError(res.data.error);
       })
       .catch((error) => setError(error));
-  });
 
-  const { authObject } = useContext(AuthContext);
+    axios
+      .get(
+        `${Variables.API_URI}/user/percent_attendance/${id}/${authObject.user.organizationID}`
+      )
+      .then((res) => {
+        setPercentAttendance(res.data.data);
+        setError(res.data.error);
+      })
+      .catch((error) => setError(error));
+  }, []);
 
   const roles = [
     {
@@ -95,6 +104,15 @@ export default function UserDetails() {
           />
           <TextField
             fullWidth
+            label="net salary"
+            disabled
+            defaultValue={(data.salary * percentAttendance) / 100}
+            InputProps={{
+              startAdornment: <span style={{ marginRight: "5px" }}>Rs.</span>,
+            }}
+          />
+          <TextField
+            fullWidth
             name="phone"
             type={"tel"}
             defaultValue={data.phone}
@@ -150,26 +168,27 @@ export default function UserDetails() {
             authObject.user.role !== "Worker" ? "space-around" : "flex-start"
           }
         >
-          <Grid item xs={4} sx={styles.linkGrid}>
-            <NavLink style={styles.link} to={`/users/${id}/report`}>
+          <Grid item xs={4}>
+            <Button
+              variant={"contained"}
+              onClick={() => navigate(`/users/${id}/report`)}
+            >
               Report
-            </NavLink>
+            </Button>
           </Grid>
-          {authObject.user.role !== "Worker" && (
-            <Grid item xs={4}>
-              {loading ? (
-                <Progress color={"success"} />
-              ) : (
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={handleUpdate}
-                >
-                  Update
-                </Button>
-              )}
-            </Grid>
-          )}
+          <Grid item xs={4}>
+            {loading ? (
+              <Progress color={"success"} />
+            ) : (
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleUpdate}
+              >
+                Update
+              </Button>
+            )}
+          </Grid>
         </Grid>
         {error && <ErrorAlert error={error} setError={setError} />}
       </Grid>
