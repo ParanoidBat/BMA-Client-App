@@ -42,10 +42,10 @@ export default function Users() {
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else {
-          setUsersList((prev) => ({
+          setUsersList({
             data: res.data.data,
             count: res.data.count,
-          }));
+          });
         }
       })
       .catch((error) => setError(error))

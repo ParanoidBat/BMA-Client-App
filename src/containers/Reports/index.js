@@ -26,7 +26,7 @@ export default function Reports() {
   useEffect(() => {
     getReports();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, page]);
+  }, [value]);
 
   const ranges = ["weekly", "monthly", "3 months", "custom"];
 
@@ -55,7 +55,61 @@ export default function Reports() {
 
       axios
         .post(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=${page}`,
+          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=1`,
+          {
+            from: dates.from,
+            to: dates.to,
+          }
+        )
+        .then((res) => {
+          if (res.data.error) setError(res.data.error);
+          else {
+            setReports({
+              data: res.data.data,
+              percentageAttendance: res.data.percentageAttendance,
+              count: res.data.count,
+            });
+            setPage(res.data.page);
+          }
+        })
+        .catch((error) => setError(error))
+        .finally(setLoading(false));
+    } else {
+      axios
+        .get(
+          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=1`
+        )
+        .then((res) => {
+          if (res.data.error) setError(res.data.error);
+          else {
+            setReports({
+              data: res.data.data,
+              percentageAttendance: res.data.percentageAttendance,
+              count: res.data.count,
+            });
+            setPage(res.data.page);
+          }
+        })
+        .catch((error) => setError(error))
+        .finally(setLoading(false));
+    }
+  };
+
+  const handleLoadMore = () => {
+    let reportFor = ranges[value];
+    if (reportFor === "3 months") reportFor = "three";
+    if (reportFor === "custom") {
+      if (!dates.from || !dates.to) {
+        setError("Select Both Dates");
+        return;
+      }
+      setLoading(true);
+
+      axios
+        .post(
+          `${Variables.API_URI}/report/${reportFor}/${
+            authObject.user.organizationID
+          }?page=${page + 1}`,
           {
             from: dates.from,
             to: dates.to,
@@ -66,32 +120,30 @@ export default function Reports() {
           else {
             setReports((prev) => ({
               data: [...prev.data, ...res.data.data],
-              percentageAttendance: res.data.percentageAttendance,
-              page: res.data.page,
-              count: res.data.count,
             }));
-            setLoading(false);
+            setPage(res.data.page);
           }
         })
-        .catch((error) => setError(error));
+        .catch((error) => setError(error))
+        .finally(setLoading(false));
     } else {
       axios
         .get(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=${page}`
+          `${Variables.API_URI}/report/${reportFor}/${
+            authObject.user.organizationID
+          }?page=${page + 1}`
         )
         .then((res) => {
           if (res.data.error) setError(res.data.error);
           else {
             setReports((prev) => ({
               data: [...prev.data, ...res.data.data],
-              percentageAttendance: res.data.percentageAttendance,
-              page: res.data.page,
-              count: res.data.count,
             }));
-            setLoading(false);
+            setPage(res.data.page);
           }
         })
-        .catch((error) => setError(error));
+        .catch((error) => setError(error))
+        .finally(setLoading(false));
     }
   };
 
@@ -151,8 +203,8 @@ export default function Reports() {
             ))}
             <Button
               endIcon={<KeyboardArrowDownOutlined />}
-              onClick={() => setPage((prev) => prev + 1)}
-              disabled={reports.data.length === reports.count}
+              onClick={() => handleLoadMore()}
+              disabled={!reports.count || reports.data.length === reports.count}
             >
               Load More
             </Button>
