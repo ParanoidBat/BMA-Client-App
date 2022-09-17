@@ -125,10 +125,12 @@ export default function Users() {
     if (!validateInput()) return;
 
     axios
-      .post(`${Variables.API_URI}/user/`, {
-        ...userData,
-        organizationID: authObject.user.organizationID,
-      })
+      .put(
+        `${Variables.API_URI}/user/${userData.authID}/${authObject.user.organizationID}`,
+        {
+          ...userData,
+        }
+      )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         setUserData({});
