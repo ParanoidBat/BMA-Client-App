@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Chip } from "@mui/material";
 import { AuthContext } from "contexts/authContext";
 import axios from "axios";
 import Progress from "components/Progress";
 import ErrorAlert from "components/ErrorAlert";
 import AttendanceCard from "components/AttendanceCard";
-import AttendanceChip from "components/AttendanceChip";
 import Variables from "variables";
 
 export default function TodaysReport() {
@@ -36,7 +35,11 @@ export default function TodaysReport() {
   ) : (
     <Grid container justifyContent="center">
       <Grid item xs={"auto"}>
-        <AttendanceChip percentage={report.percentageAttendance} />
+        <Chip
+          label={`Attendance ${report.totalAttendance ?? "None"}`}
+          color={"info"}
+          sx={{ fontSize: "1.5rem", padding: "0px 5px", margin: "5px 0px" }}
+        />
       </Grid>
       <Grid container item direction="column">
         {report.data.map((reportObj, index) => (

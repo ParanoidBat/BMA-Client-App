@@ -17,6 +17,7 @@ import ErrorAlert from "components/ErrorAlert";
 import InputModal from "components/InputModal";
 import { AuthContext } from "contexts/authContext";
 import moment from "moment";
+import { findIndex } from "lodash";
 
 import styles from "./styles";
 
@@ -27,6 +28,7 @@ export default function Leaves() {
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const [reason, setReason] = useState("");
 
   const { authObject } = useContext(AuthContext);
 
@@ -63,6 +65,13 @@ export default function Leaves() {
       : "#d02a2a33";
   };
 
+  const hasPendingLeave = () => {
+    const index = findIndex(leaves, (leave) => leave.status === "Pending");
+
+    if (index === -1) return false;
+    return true;
+  };
+
   const handleButtonClick = (value, id) => {
     axios
       .put(`${Variables.API_URI}/leave/${id}`, {
@@ -93,12 +102,25 @@ export default function Leaves() {
   };
 
   const handleApplyButton = () => {
+    if (dates.from > dates.to) {
+      [dates.from, dates.to] = [dates.to, dates.from];
+    }
+
     axios
       .post(`${Variables.API_URI}/leave`, {
         userID: authObject.user._id,
         orgID: authObject.user.organizationID,
         from: dates.from,
         to: dates.to,
+        reason,
+      })
+      .then((res) => {
+        if (res.data.error) setError(res.data.error);
+        else {
+          setLeaves((prev) => {
+            return [...prev, res.data.data];
+          });
+        }
       })
       .catch((error) => setError(error))
       .finally(setOpenModal(false));
@@ -157,6 +179,26 @@ export default function Leaves() {
                   </Typography>
                 </Grid>
               </Grid>
+              <Grid container item>
+                <Grid item xs={3}>
+                  <Typography sx={styles.infoFont}>Applied:</Typography>
+                </Grid>
+                <Grid item xs={"auto"}>
+                  <Typography sx={styles.infoFont}>
+                    {moment(leave.createdOn).format("DD MMM, YYYY")}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container item>
+                <Grid item xs={3}>
+                  <Typography sx={styles.infoFont}>Reason:</Typography>
+                </Grid>
+                <Grid item xs={"auto"}>
+                  <Typography sx={{ ...styles.infoFont, ...styles.reasonText }}>
+                    {leave.reason}
+                  </Typography>
+                </Grid>
+              </Grid>
               <Typography
                 textAlign={"center"}
                 sx={styles.status}
@@ -198,7 +240,7 @@ export default function Leaves() {
         ))}
         {error && <ErrorAlert error={error} setError={setError} />}
       </Grid>
-      {authObject.user.role !== "Admin" && leaves?.length < 1 && (
+      {authObject.user.role !== "Admin" && !hasPendingLeave() && (
         <Button
           variant="contained"
           color="primary"
@@ -211,7 +253,7 @@ export default function Leaves() {
       {openModal && (
         <InputModal onClose={() => setOpenModal(false)} header="Apply Leave">
           <Grid container item direction="column">
-            <Grid item xs={4} sx={styles.dateGrid}>
+            <Grid item xs={3} sx={styles.dateGrid}>
               <Typography sx={styles.fontBold}>From</Typography>
               <Input
                 type="date"
@@ -222,7 +264,7 @@ export default function Leaves() {
                 onChange={handleDateChange}
               />
             </Grid>
-            <Grid item xs={4} sx={styles.dateGrid}>
+            <Grid item xs={3} sx={styles.dateGrid}>
               <Typography sx={styles.fontBold}>To</Typography>
               <Input
                 type="date"
@@ -231,6 +273,17 @@ export default function Leaves() {
                 value={dates.to}
                 sx={styles.input}
                 onChange={handleDateChange}
+              />
+            </Grid>
+            <Grid item xs={3} sx={styles.dateGrid}>
+              <Typography sx={styles.fontBold}>Reason</Typography>
+              <Input
+                type="text"
+                name="reason"
+                disableUnderline
+                value={reason}
+                sx={styles.input}
+                onChange={(e) => setReason(e.target.value)}
               />
             </Grid>
             <Grid item sx={styles.marginTop}>
