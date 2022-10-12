@@ -102,6 +102,8 @@ export default function Leaves() {
   };
 
   const handleApplyButton = () => {
+    if (dates.from === "2000-01-01" || dates.to === "2000-01-01") return;
+
     if (dates.from > dates.to) {
       [dates.from, dates.to] = [dates.to, dates.from];
     }
