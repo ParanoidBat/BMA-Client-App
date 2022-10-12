@@ -26,7 +26,7 @@ export default function Leaves() {
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [dates, setDates] = useState({});
+  const [dates, setDates] = useState({ from: "2000-01-01", to: "2000-01-01" });
   const [openModal, setOpenModal] = useState(false);
   const [reason, setReason] = useState("");
 
