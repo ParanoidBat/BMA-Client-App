@@ -168,7 +168,7 @@ export default function Users() {
       <Grid container direction={"column"}>
         {usersList.data.map((user) => (
           <Card key={`${user._id}`} sx={styles.cardMargin}>
-            <CardContent>
+            <CardContent style={{ paddingBottom: 0 }}>
               <Typography variant="h5" textAlign={"center"} gutterBottom>
                 {user.name}
               </Typography>

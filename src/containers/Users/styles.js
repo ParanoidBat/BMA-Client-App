@@ -10,7 +10,7 @@ const styles = {
   fab: {
     padding: "13px 0px",
     borderRadius: "50%",
-    position: "absolute",
+    position: "fixed",
     bottom: "15px",
     right: "15px",
     boxShadow: "-5px 5px 8px #797f8d",

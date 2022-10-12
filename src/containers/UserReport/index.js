@@ -19,7 +19,7 @@ export default function UserReport() {
 
   const [report, setReport] = useState({ data: [] });
   const [error, setError] = useState(null);
-  const [dates, setDates] = useState({});
+  const [dates, setDates] = useState({ from: "2000-01-01", to: "2000-01-01" });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
@@ -36,12 +36,12 @@ export default function UserReport() {
   };
 
   const handleClear = () => {
-    setDates({ to: "", from: "" });
+    setDates({ from: "2000-01-01", to: "2000-01-01" });
     setPage(1);
   };
 
   const getUserReport = () => {
-    if (!dates.from || !dates.to) return;
+    if (dates.from === "2000-01-01" || dates.to === "2000-01-01") return;
 
     axios
       .post(
