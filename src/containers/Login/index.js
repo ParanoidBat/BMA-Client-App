@@ -123,7 +123,7 @@ export default function Login({ setFirstPage }) {
             ),
           }}
         />
-        <Grid item xs={2} alignSelf={"center"}>
+        <Grid item xs={1} alignSelf={"center"}>
           {loading ? (
             <CircularProgress color="success" size={30} />
           ) : (
@@ -143,7 +143,7 @@ export default function Login({ setFirstPage }) {
             <Divider />
           </Grid>
         </Grid>
-        <Grid item xs={2} alignSelf="center">
+        <Grid item xs={1} alignSelf="center">
           <Button variant="text" onClick={() => setFirstPage("Signup")}>
             Sign Up
           </Button>
