@@ -18,7 +18,7 @@ export default function Reports() {
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [dates, setDates] = useState({});
+  const [dates, setDates] = useState({ from: "2000-01-01", to: "2000-01-01" });
   const [page, setPage] = useState(1);
 
   const { authObject } = useContext(AuthContext);
@@ -47,8 +47,8 @@ export default function Reports() {
     let reportFor = ranges[value];
     if (reportFor === "3 months") reportFor = "three";
     if (reportFor === "custom") {
-      if (!dates.from || !dates.to) {
-        setError("Select Both Dates");
+      if (dates.from === "2000-01-01" || dates.to === "2000-01-01") {
+        setError("Select Valid Dates");
         return;
       }
       setLoading(true);
