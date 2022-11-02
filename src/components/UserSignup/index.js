@@ -15,7 +15,7 @@ import axios from "axios";
 
 import styles from "./styles";
 
-export default function UserSignup({ organizationID, setFirstPage }) {
+export default function UserSignup({ organizationData, setFirstPage }) {
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false);
@@ -38,15 +38,15 @@ export default function UserSignup({ organizationID, setFirstPage }) {
     setLoading(true);
 
     return axios
-      .post(`${Variables.API_URI}/user`, {
+      .post(`${Variables.API_URI}/signup`, {
         name: data.name,
         phone: data.phone,
         address: data.address,
         email: data.email,
         password: data.password,
-        organizationID,
         role: "Admin",
         authID: 0,
+        ...organizationData,
       })
       .then((res) => {
         if (!res.data.data) {

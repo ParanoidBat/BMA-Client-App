@@ -5,7 +5,7 @@ import { ChevronLeft } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
 
 export default function Signup({ setFirstPage }) {
-  const [organizationID, setOrganizationID] = useState(null);
+  const [organizationData, setOrganizationData] = useState(null);
 
   return (
     <>
@@ -14,11 +14,11 @@ export default function Signup({ setFirstPage }) {
           <ChevronLeft /> Login
         </Button>
       </Grid>
-      {!organizationID ? (
-        <OrgSignup setOrganizationID={setOrganizationID} />
+      {!organizationData ? (
+        <OrgSignup setOrganizationData={setOrganizationData} />
       ) : (
         <UserSignup
-          organizationID={organizationID}
+          organizationData={organizationData}
           setFirstPage={setFirstPage}
         />
       )}
