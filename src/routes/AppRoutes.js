@@ -21,12 +21,12 @@ export default function AppRoutes() {
       <Route path="/users/:id/:orgID/details" element={<MyDetails />} />
       <Route path="/users/:id/report" element={<UserReport />} />
       <Route path="/leaves" element={<Leaves />} />
-      {authObject.user.role !== "Worker" && (
+      {authObject.user.user_role !== "Worker" && (
         <>
           <Route path="/users/:id" element={<UserDetails />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/users" element={<Users />} />
-          {authObject.user.role === "Admin" && (
+          {authObject.user.user_role === "Admin" && (
             <>
               <Route path="/setup" element={<Setup />} />
               <Route path="/settings" element={<Settings />} />

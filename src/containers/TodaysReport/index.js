@@ -26,7 +26,7 @@ export default function TodaysReport() {
           setLoading(false);
         }
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

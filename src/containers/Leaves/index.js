@@ -24,7 +24,7 @@ import styles from "./styles";
 export default function Leaves() {
   const [leaves, setLeaves] = useState();
   const [status, setStatus] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState({ from: "2000-01-01", to: "2000-01-01" });
   const [openModal, setOpenModal] = useState(false);
@@ -34,11 +34,12 @@ export default function Leaves() {
 
   useEffect(() => {
     let query;
-    if (authObject.user.role !== "Worker") {
+
+    if (authObject.user.user_role !== "Worker") {
       query = `${Variables.API_URI}/leave?id=${
         authObject.user.organization_id
       }${status ? `&status=${status}` : ""}`;
-    } else query = `${Variables.API_URI}/leave/${authObject.user._id}`;
+    } else query = `${Variables.API_URI}/leave/${authObject.user.id}`;
 
     axios
       .get(query)
@@ -66,13 +67,16 @@ export default function Leaves() {
   };
 
   const hasPendingLeave = () => {
-    const index = findIndex(leaves, (leave) => leave.status === "Pending");
+    const index = findIndex(
+      leaves,
+      (leave) => leave.leave_status === "Pending"
+    );
 
     if (index === -1) return false;
     return true;
   };
 
-  const handleButtonClick = (value, id) => {
+  const handleStatusUpdate = (value, id) => {
     axios
       .put(`${Variables.API_URI}/leave/${id}`, {
         status: value,
@@ -80,13 +84,13 @@ export default function Leaves() {
       .then((res) => {
         if (res.data.data) {
           const updatedData = leaves.map((leave) =>
-            leave._id === id ? res.data.data : leave
+            leave.id === id ? res.data.data : leave
           );
 
           setLeaves(updatedData);
         }
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.message));
   };
 
   const handleChipClick = (state) => {
@@ -110,7 +114,7 @@ export default function Leaves() {
 
     axios
       .post(`${Variables.API_URI}/leave`, {
-        userID: authObject.user._id,
+        userID: authObject.user.id,
         orgID: authObject.user.organization_id,
         from: dates.from,
         to: dates.to,
@@ -124,7 +128,7 @@ export default function Leaves() {
           });
         }
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.message))
       .finally(setOpenModal(false));
   };
 
@@ -139,7 +143,7 @@ export default function Leaves() {
           justifyContent={"space-evenly"}
           sx={styles.chipsContainer}
         >
-          {authObject.user.role !== "Worker" &&
+          {authObject.user.user_role !== "Worker" &&
             ["Pending", "Accepted", "Rejected"].map((state, index) => (
               <Chip
                 key={`${state}-${index}`}
@@ -159,7 +163,7 @@ export default function Leaves() {
                 gutterBottom
                 sx={styles.nameFont}
               >
-                {leave.userID.name}
+                {leave.name}
               </Typography>
               <Grid container item>
                 <Grid item xs={3}>
@@ -167,7 +171,7 @@ export default function Leaves() {
                 </Grid>
                 <Grid item xs={"auto"}>
                   <Typography sx={styles.infoFont}>
-                    {moment(leave.from).format("DD MMM, YYYY")}
+                    {moment(leave.from_date).format("DD MMM, YYYY")}
                   </Typography>
                 </Grid>
               </Grid>
@@ -177,7 +181,7 @@ export default function Leaves() {
                 </Grid>
                 <Grid item xs={"auto"}>
                   <Typography sx={styles.infoFont}>
-                    {moment(leave.to).format("DD MMM, YYYY")}
+                    {moment(leave.to_date).format("DD MMM, YYYY")}
                   </Typography>
                 </Grid>
               </Grid>
@@ -187,7 +191,7 @@ export default function Leaves() {
                 </Grid>
                 <Grid item xs={"auto"}>
                   <Typography sx={styles.infoFont}>
-                    {moment(leave.createdOn).format("DD MMM, YYYY")}
+                    {moment(leave.created_on).format("DD MMM, YYYY")}
                   </Typography>
                 </Grid>
               </Grid>
@@ -205,14 +209,14 @@ export default function Leaves() {
                 textAlign={"center"}
                 sx={styles.status}
                 style={{
-                  color: getStatusColor(leave.status),
-                  backgroundColor: getStatusShadowColor(leave.status),
+                  color: getStatusColor(leave.leave_status),
+                  backgroundColor: getStatusShadowColor(leave.leave_status),
                 }}
               >
-                {leave.status}
+                {leave.leave_status}
               </Typography>
             </CardContent>
-            {authObject.user.role !== "Worker" && (
+            {authObject.user.user_role !== "Worker" && (
               <CardActions>
                 <Grid container item justifyContent={"space-around"}>
                   <Grid item>
@@ -220,7 +224,7 @@ export default function Leaves() {
                       variant="contained"
                       color="success"
                       disabled={leave.status !== "Pending"}
-                      onClick={() => handleButtonClick("Accepted", leave._id)}
+                      onClick={() => handleStatusUpdate("Accepted", leave.id)}
                     >
                       Accept
                     </Button>
@@ -230,7 +234,7 @@ export default function Leaves() {
                       variant="contained"
                       color="error"
                       disabled={leave.status !== "Pending"}
-                      onClick={() => handleButtonClick("Rejected", leave._id)}
+                      onClick={() => handleStatusUpdate("Rejected", leave.id)}
                     >
                       Reject
                     </Button>
@@ -242,7 +246,7 @@ export default function Leaves() {
         ))}
         {error && <ErrorAlert error={error} setError={setError} />}
       </Grid>
-      {authObject.user.role !== "Admin" && !hasPendingLeave() && (
+      {authObject.user.user_role !== "Admin" && !hasPendingLeave() && (
         <Button
           variant="contained"
           color="primary"

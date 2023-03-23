@@ -9,7 +9,7 @@ import { AuthContext } from "contexts/authContext";
 
 export default function UserDetails() {
   const [data, setData] = useState();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
   const [percentAttendance, setPercentAttendance] = useState(0);
@@ -25,7 +25,7 @@ export default function UserDetails() {
         setData(res.data.data);
         setError(res.data.error);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.message));
 
     axios
       .get(
@@ -35,7 +35,7 @@ export default function UserDetails() {
         setPercentAttendance(res.data.data);
         setError(res.data.error);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,7 +94,7 @@ export default function UserDetails() {
             type={"number"}
             defaultValue={data.salary}
             label="salary"
-            disabled={authObject.user.role === "Worker"}
+            disabled={authObject.user.user_role === "Worker"}
             onChange={handleChange}
             inputProps={{
               min: 0,
@@ -117,7 +117,7 @@ export default function UserDetails() {
             name="phone"
             type={"tel"}
             defaultValue={data.phone}
-            disabled={authObject.user.role === "Worker"}
+            disabled={authObject.user.user_role === "Worker"}
             onChange={handleChange}
             label="phone"
           />
@@ -126,7 +126,7 @@ export default function UserDetails() {
             name="address"
             type={"text"}
             defaultValue={data.address}
-            disabled={authObject.user.role === "Worker"}
+            disabled={authObject.user.user_role === "Worker"}
             label="address"
             onChange={handleChange}
           />
@@ -135,7 +135,7 @@ export default function UserDetails() {
             name="advance"
             type={"number"}
             defaultValue={data.advance}
-            disabled={authObject.user.role === "Worker"}
+            disabled={authObject.user.user_role === "Worker"}
             onChange={handleChange}
             label="advance"
             inputProps={{
@@ -148,10 +148,10 @@ export default function UserDetails() {
           <TextField
             fullWidth
             select
-            value={data.role}
-            name="role"
+            value={data.user_role}
+            name="user_role"
             label="role"
-            disabled={authObject.user.role === "Worker"}
+            disabled={authObject.user.user_role === "Worker"}
             onChange={handleChange}
           >
             {roles.map((role) => (
@@ -166,7 +166,9 @@ export default function UserDetails() {
           item
           xs={12}
           justifyContent={
-            authObject.user.role !== "Worker" ? "space-around" : "flex-start"
+            authObject.user.user_role !== "Worker"
+              ? "space-around"
+              : "flex-start"
           }
         >
           <Grid item xs={4}>

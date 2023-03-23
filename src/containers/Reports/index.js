@@ -124,7 +124,7 @@ export default function Reports() {
             setPage(res.data.page);
           }
         })
-        .catch((error) => setError(error))
+        .catch((error) => setError(error.message))
         .finally(setLoading(false));
     } else {
       axios
@@ -142,7 +142,7 @@ export default function Reports() {
             setPage(res.data.page);
           }
         })
-        .catch((error) => setError(error))
+        .catch((error) => setError(error.message))
         .finally(setLoading(false));
     }
   };

@@ -15,8 +15,8 @@ import Progress from "components/Progress";
 import styles from "./styles";
 
 export default function Settings() {
-  const [isSatOff, setIsSatOff] = useState();
-  const [error, setError] = useState(null);
+  const [isSatOff, setIsSatOff] = useState(false);
+  const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
   const { authObject } = useContext(AuthContext);
@@ -28,9 +28,9 @@ export default function Settings() {
       )
       .then((res) => {
         setError(res.data.error);
-        setIsSatOff(res.data.data.isSaturdayOff);
+        setIsSatOff(res.data.data.is_saturday_off);
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.message))
       .finally(setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -42,7 +42,7 @@ export default function Settings() {
       .put(
         `${Variables.API_URI}/organization/${authObject.user.organization_id}`,
         {
-          isSaturdayOff: isSatOff,
+          is_saturday_off: isSatOff,
         }
       )
       .then((res) => setError(res.data.error))

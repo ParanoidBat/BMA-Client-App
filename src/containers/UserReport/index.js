@@ -18,7 +18,7 @@ export default function UserReport() {
   const { authObject } = useContext(AuthContext);
 
   const [report, setReport] = useState({ data: [] });
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
   const [dates, setDates] = useState({ from: "2000-01-01", to: "2000-01-01" });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ export default function UserReport() {
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else {
-          const newData = differenceBy(res.data.data, report.data, "_id");
+          const newData = differenceBy(res.data.data, report.data, "uas");
 
           setReport((prev) => ({
             data: [...prev.data, ...newData],

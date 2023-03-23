@@ -6,7 +6,7 @@ import styles from "./styles";
 
 export default function AttendanceCard({ report, index, displayName = true }) {
   return (
-    <Card key={`${report.userName}-${index}`} sx={styles.card}>
+    <Card key={`${report.user_name}-${index}`} sx={styles.card}>
       <CardContent style={{ paddingBottom: 0 }}>
         {displayName && (
           <Typography
@@ -15,7 +15,7 @@ export default function AttendanceCard({ report, index, displayName = true }) {
             gutterBottom
             sx={styles.userName}
           >
-            {report.userName}
+            {report.user_name}
           </Typography>
         )}
         <Grid container item>
@@ -24,7 +24,7 @@ export default function AttendanceCard({ report, index, displayName = true }) {
           </Grid>
           <Grid item xs={8}>
             <Typography sx={styles.infoFont}>
-              {moment(report.date, "YYYY-MM-DD").format("DD MMM, YYYY")}
+              {moment(report.created, "YYYY-MM-DD").format("DD MMM, YYYY")}
             </Typography>
           </Grid>
         </Grid>
@@ -35,7 +35,7 @@ export default function AttendanceCard({ report, index, displayName = true }) {
             </Typography>
           </Grid>
           <Grid item xs={8}>
-            <Typography sx={styles.infoFont}>{report.timeIn}</Typography>
+            <Typography sx={styles.infoFont}>{report.check_in}</Typography>
           </Grid>
         </Grid>
         <Grid container item>
@@ -46,7 +46,7 @@ export default function AttendanceCard({ report, index, displayName = true }) {
           </Grid>
           <Grid item xs={8}>
             <Typography sx={styles.infoFont}>
-              {report.timeOut ?? "None"}
+              {report.check_out ?? "None"}
             </Typography>
           </Grid>
         </Grid>

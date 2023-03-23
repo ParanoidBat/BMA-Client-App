@@ -9,7 +9,7 @@ import styles from "./styles";
 
 export default function UserDetails() {
   const [data, setData] = useState();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
   const [percentAttendance, setPercentAttendance] = useState(0);
 
   const { id, orgID } = useParams();
@@ -29,7 +29,7 @@ export default function UserDetails() {
         setPercentAttendance(res.data.data);
         setError(res.data.error);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.message));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,7 +89,7 @@ export default function UserDetails() {
           </Grid>
           <Grid item xs={8}>
             <Typography gutterBottom variant="h6">
-              {data.role}
+              {data.user_role}
             </Typography>
           </Grid>
         </Grid>

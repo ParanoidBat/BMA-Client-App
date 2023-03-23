@@ -88,7 +88,10 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
       <Divider />
       <List onClick={() => handleClose()}>
         {reportLinks.map((report, index) => {
-          if (authObject.user.role === "Worker" && report.text === "Reports") {
+          if (
+            authObject.user.user_role === "Worker" &&
+            report.text === "Reports"
+          ) {
             return <></>;
           }
           return (
@@ -104,7 +107,10 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
         })}
         <Divider />
         {userLinks.map((user, index) => {
-          if (authObject.user.role === "Worker" && user.text === "Users List") {
+          if (
+            authObject.user.user_role === "Worker" &&
+            user.text === "Users List"
+          ) {
             return <></>;
           }
           return (
@@ -118,11 +124,11 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
             </ListItem>
           );
         })}
-        {authObject.user.role !== "Admin" && (
+        {authObject.user.user_role !== "Admin" && (
           <ListItem>
             <ListItemButton>
               <NavLink
-                to={`/users/${authObject.user._id}/${authObject.user.organization_id}/details`}
+                to={`/users/${authObject.user.id}/${authObject.user.organization_id}/details`}
                 style={styles.Link}
               >
                 <span style={styles.Icon}>
@@ -134,7 +140,7 @@ export default function SideDrawer({ open, handleClose, setFirstPage }) {
           </ListItem>
         )}
         <Divider />
-        {authObject.user.role === "Admin" &&
+        {authObject.user.user_role === "Admin" &&
           miscellaneousLinks.map((misc, index) => (
             <ListItem key={`misc-${index}`}>
               <ListItemButton>
