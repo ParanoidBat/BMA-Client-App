@@ -223,7 +223,7 @@ export default function Leaves() {
                     <Button
                       variant="contained"
                       color="success"
-                      disabled={leave.status !== "Pending"}
+                      disabled={leave.leave_status !== "Pending"}
                       onClick={() => handleStatusUpdate("Accepted", leave.id)}
                     >
                       Accept
@@ -233,7 +233,7 @@ export default function Leaves() {
                     <Button
                       variant="contained"
                       color="error"
-                      disabled={leave.status !== "Pending"}
+                      disabled={leave.leave_status !== "Pending"}
                       onClick={() => handleStatusUpdate("Rejected", leave.id)}
                     >
                       Reject

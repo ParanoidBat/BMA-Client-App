@@ -24,7 +24,7 @@ export default function AttendanceCard({ report, index, displayName = true }) {
           </Grid>
           <Grid item xs={8}>
             <Typography sx={styles.infoFont}>
-              {moment(report.created, "YYYY-MM-DD").format("DD MMM, YYYY")}
+              {moment(report.created).format("DD MMM, YYYY")}
             </Typography>
           </Grid>
         </Grid>
