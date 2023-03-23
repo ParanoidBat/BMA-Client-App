@@ -70,7 +70,7 @@ export default function Login({ setFirstPage }) {
 
         await Storage.set({
           key: "OrgID",
-          value: data.user.organizationID,
+          value: data.user.organization_id,
         });
 
         setAuthObject({

@@ -16,7 +16,7 @@ export default function Reports() {
   const [reports, setReports] = useState({
     data: [],
   });
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState({ from: "2000-01-01", to: "2000-01-01" });
   const [page, setPage] = useState(1);
@@ -55,7 +55,7 @@ export default function Reports() {
 
       axios
         .post(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=1`,
+          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organization_id}?page=1`,
           {
             from: dates.from,
             to: dates.to,
@@ -72,12 +72,12 @@ export default function Reports() {
             setPage(res.data.page);
           }
         })
-        .catch((error) => setError(error))
+        .catch((error) => setError(error.message))
         .finally(setLoading(false));
     } else {
       axios
         .get(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organizationID}?page=1`
+          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organization_id}?page=1`
         )
         .then((res) => {
           if (res.data.error) setError(res.data.error);
@@ -90,7 +90,7 @@ export default function Reports() {
             setPage(res.data.page);
           }
         })
-        .catch((error) => setError(error))
+        .catch((error) => setError(error.message))
         .finally(setLoading(false));
     }
   };
@@ -108,7 +108,7 @@ export default function Reports() {
       axios
         .post(
           `${Variables.API_URI}/report/${reportFor}/${
-            authObject.user.organizationID
+            authObject.user.organization_id
           }?page=${page + 1}`,
           {
             from: dates.from,
@@ -130,7 +130,7 @@ export default function Reports() {
       axios
         .get(
           `${Variables.API_URI}/report/${reportFor}/${
-            authObject.user.organizationID
+            authObject.user.organization_id
           }?page=${page + 1}`
         )
         .then((res) => {

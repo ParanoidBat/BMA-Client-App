@@ -29,7 +29,7 @@ export default function UserDetails() {
 
     axios
       .get(
-        `${Variables.API_URI}/user/percent_attendance/${id}/${authObject.user.organizationID}`
+        `${Variables.API_URI}/user/percent_attendance/${id}/${authObject.user.organization_id}`
       )
       .then((res) => {
         setPercentAttendance(res.data.data);

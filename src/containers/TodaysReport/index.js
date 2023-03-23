@@ -9,7 +9,7 @@ import Variables from "variables";
 
 export default function TodaysReport() {
   const [report, setReport] = useState();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
   const { authObject } = useContext(AuthContext);
@@ -17,7 +17,7 @@ export default function TodaysReport() {
   useEffect(() => {
     axios
       .get(
-        `${Variables.API_URI}/report/today/${authObject.user.organizationID}`
+        `${Variables.API_URI}/report/today/${authObject.user.organization_id}`
       )
       .then((res) => {
         if (res.data.error) setError(res.data.error);

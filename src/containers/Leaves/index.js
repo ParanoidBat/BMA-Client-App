@@ -35,9 +35,9 @@ export default function Leaves() {
   useEffect(() => {
     let query;
     if (authObject.user.role !== "Worker") {
-      query = `${Variables.API_URI}/leave?id=${authObject.user.organizationID}${
-        status ? `&status=${status}` : ""
-      }`;
+      query = `${Variables.API_URI}/leave?id=${
+        authObject.user.organization_id
+      }${status ? `&status=${status}` : ""}`;
     } else query = `${Variables.API_URI}/leave/${authObject.user._id}`;
 
     axios
@@ -45,7 +45,7 @@ export default function Leaves() {
       .then((res) => {
         setLeaves(res.data.data);
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.message))
       .finally(setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
@@ -111,7 +111,7 @@ export default function Leaves() {
     axios
       .post(`${Variables.API_URI}/leave`, {
         userID: authObject.user._id,
-        orgID: authObject.user.organizationID,
+        orgID: authObject.user.organization_id,
         from: dates.from,
         to: dates.to,
         reason,

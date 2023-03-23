@@ -37,7 +37,7 @@ export default function Users() {
 
     axios
       .get(
-        `${Variables.API_URI}/organization/${authObject.user.organizationID}/users?page=1`
+        `${Variables.API_URI}/organization/${authObject.user.organization_id}/users?page=1`
       )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
@@ -48,7 +48,7 @@ export default function Users() {
           });
         }
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.message))
       .finally(setLoading(false));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,7 +74,7 @@ export default function Users() {
       setError("Invalid Name");
       return false;
     }
-    if (!userData.authID || userData.authID < 0) {
+    if (!userData.finger_id || userData.finger_id <= 0) {
       setError("Invalid Finger ID");
       return false;
     }
@@ -100,9 +100,7 @@ export default function Users() {
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else if (res.data.data) {
-          const filteredArray = usersList.data.filter(
-            (user) => user._id !== id
-          );
+          const filteredArray = usersList.data.filter((user) => user.id !== id);
 
           setUsersList((prev) => ({
             ...prev,
@@ -111,7 +109,7 @@ export default function Users() {
           }));
         }
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error.message));
   };
 
   const handleChange = (e) => {
@@ -126,7 +124,7 @@ export default function Users() {
 
     axios
       .put(
-        `${Variables.API_URI}/user/${userData.authID}/${authObject.user.organizationID}`,
+        `${Variables.API_URI}/user/${userData.finger_id}/${authObject.user.organization_id}`,
         {
           ...userData,
         }
@@ -135,7 +133,7 @@ export default function Users() {
         if (res.data.error) setError(res.data.error);
         setUserData({});
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.message))
       .finally(setOpenModal(false));
   };
 
@@ -145,7 +143,7 @@ export default function Users() {
     axios
       .get(
         `${Variables.API_URI}/organization/${
-          authObject.user.organizationID
+          authObject.user.organization_id
         }/users?page=${page + 1}`
       )
       .then((res) => {
@@ -157,7 +155,7 @@ export default function Users() {
           setPage(res.data.page);
         }
       })
-      .catch((error) => setError(error))
+      .catch((error) => setError(error.message))
       .finally(setLoading(false));
   };
 
@@ -167,7 +165,7 @@ export default function Users() {
     <>
       <Grid container direction={"column"}>
         {usersList.data.map((user) => (
-          <Card key={`${user._id}`} sx={styles.cardMargin}>
+          <Card key={`${user.id}`} sx={styles.cardMargin}>
             <CardContent style={{ paddingBottom: 0 }}>
               <Typography variant="h5" textAlign={"center"} gutterBottom>
                 {user.name}
@@ -183,12 +181,12 @@ export default function Users() {
             </CardContent>
             <CardActions>
               <Grid container item justifyContent={"space-around"}>
-                <NavLink style={styles.link} to={`/users/${user._id}`}>
+                <NavLink style={styles.link} to={`/users/${user.id}`}>
                   Details
                 </NavLink>
                 <Button
                   color="warning"
-                  onClick={() => handleDeleteUser(user._id)}
+                  onClick={() => handleDeleteUser(user.id)}
                 >
                   Delete
                 </Button>
@@ -235,10 +233,10 @@ export default function Users() {
             />
             <TextField
               fullWidth
-              name="authID"
+              name="finger_id"
               required
               type={"number"}
-              value={userData.authID ?? ""}
+              value={userData.finger_id ?? ""}
               onChange={handleChange}
               label="finger ID"
             />
@@ -293,8 +291,8 @@ export default function Users() {
             <TextField
               fullWidth
               select
-              value={userData.role ?? ""}
-              name="role"
+              value={userData.user_role ?? ""}
+              name="user_role"
               label="role"
               onChange={handleChange}
             >

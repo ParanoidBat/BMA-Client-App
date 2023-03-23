@@ -44,8 +44,8 @@ export default function UserSignup({ organizationData, setFirstPage }) {
         address: data.address,
         email: data.email,
         password: data.password,
-        role: "Admin",
-        authID: 0,
+        user_role: "Admin",
+        finger_id: 0,
         ...organizationData,
       })
       .then((res) => {
@@ -53,7 +53,7 @@ export default function UserSignup({ organizationData, setFirstPage }) {
           setError("Something went wrong.");
         } else setFirstPage("Login");
       })
-      .catch((err) => setError(err));
+      .catch((err) => setError(err.message));
   };
 
   return (
