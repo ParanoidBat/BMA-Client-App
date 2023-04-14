@@ -100,7 +100,7 @@ export default function Users() {
 
   const handleDeleteUser = (id) => {
     axios
-      .delete(`https://bma-api-v1.herokuapp.com/user/${id}`)
+      .delete(`${Variables.API_URI}/user/${id}`)
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else if (res.data.data) {
@@ -262,7 +262,7 @@ export default function Users() {
               fullWidth
               name="salary"
               type={"number"}
-              value={userData.salary ?? ""}
+              value={userData.salary ?? 0}
               label="salary"
               onChange={handleChange}
               inputProps={{
