@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import Variables from "variables";
 import axios from "axios";
 
@@ -142,7 +142,9 @@ export default function UserSignup({ organizationData, setFirstPage }) {
           </Button>
         )}
       </Grid>
-      {error && <ErrorAlert error={error} setError={setError} />}
+      {error && (
+        <MessageAlert message={error} setMessage={setError} type={"error"} />
+      )}
     </Grid>
   );
 }

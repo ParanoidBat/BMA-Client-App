@@ -3,7 +3,7 @@ import { Grid, Chip } from "@mui/material";
 import { AuthContext } from "contexts/authContext";
 import axios from "axios";
 import Progress from "components/Progress";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import AttendanceCard from "components/AttendanceCard";
 import Variables from "variables";
 
@@ -46,7 +46,9 @@ export default function TodaysReport() {
           <AttendanceCard report={reportObj} index={index} />
         ))}
       </Grid>
-      {error && <ErrorAlert error={error} setError={setError} />}
+      {error && (
+        <MessageAlert message={error} setMessage={setError} type={"error"} />
+      )}
     </Grid>
   );
 }

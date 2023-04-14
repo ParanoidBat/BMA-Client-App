@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Grid, Input, Typography, Button } from "@mui/material";
 import AttendanceCard from "components/AttendanceCard";
 import AttendanceChip from "components/AttendanceChip";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import Progress from "components/Progress";
 import Variables from "variables";
 import { useParams } from "react-router-dom";
@@ -142,7 +142,9 @@ export default function UserReport() {
           </Grid>
         </>
       )}
-      {error && <ErrorAlert error={error} onClose={setError} />}
+      {error && (
+        <MessageAlert message={error} setMessage={setError} type={"error"} />
+      )}
     </Grid>
   );
 }

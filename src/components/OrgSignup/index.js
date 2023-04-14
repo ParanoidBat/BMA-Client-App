@@ -6,7 +6,7 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import styles from "./styles";
 
 export default function OrgSignup({ setOrganizationData }) {
@@ -99,7 +99,9 @@ export default function OrgSignup({ setOrganizationData }) {
           </Button>
         )}
       </Grid>
-      {error && <ErrorAlert error={error} setError={setError} />}
+      {error && (
+        <MessageAlert message={error} setMessage={setError} type={"error"} />
+      )}
     </Grid>
   );
 }

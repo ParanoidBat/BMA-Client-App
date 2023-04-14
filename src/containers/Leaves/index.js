@@ -13,7 +13,7 @@ import { AddOutlined } from "@mui/icons-material";
 import Variables from "variables";
 import axios from "axios";
 import Progress from "components/Progress";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import InputModal from "components/InputModal";
 import { AuthContext } from "contexts/authContext";
 import moment from "moment";
@@ -244,7 +244,9 @@ export default function Leaves() {
             )}
           </Card>
         ))}
-        {error && <ErrorAlert error={error} setError={setError} />}
+        {error && (
+          <MessageAlert message={error} setMessage={setError} type={"error"} />
+        )}
       </Grid>
       {authObject.user.user_role !== "Admin" && !hasPendingLeave() && (
         <Button

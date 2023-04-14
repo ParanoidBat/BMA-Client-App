@@ -3,13 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Variables from "variables";
 import Progress from "components/Progress";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import { Grid, Typography, TextField, MenuItem, Button } from "@mui/material";
 import { AuthContext } from "contexts/authContext";
 
 export default function UserDetails() {
   const [data, setData] = useState();
   const [error, setError] = useState(undefined);
+  const [success, setSuccess] = useState(undefined);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
   const [percentAttendance, setPercentAttendance] = useState(0);
@@ -62,7 +63,10 @@ export default function UserDetails() {
       })
       .then((res) => {
         if (res.data.error) setError(res.data.error);
-        else setData(res.data.data);
+        else {
+          setData(res.data.data);
+          setSuccess("User updated successfully!");
+        }
       })
       .catch((error) => setError(error))
       .finally(setLoading(false));
@@ -193,7 +197,16 @@ export default function UserDetails() {
             )}
           </Grid>
         </Grid>
-        {error && <ErrorAlert error={error} setError={setError} />}
+        {error && (
+          <MessageAlert message={error} setMessage={setError} type={"error"} />
+        )}
+        {success && (
+          <MessageAlert
+            message={success}
+            setMessage={setSuccess}
+            type={"success"}
+          />
+        )}
       </Grid>
     )
   );

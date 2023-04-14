@@ -13,13 +13,16 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import { Storage } from "@capacitor/storage";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import Variables from "variables";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles";
 
 export default function Login({ setFirstPage }) {
-  const [credentials, setCredentials] = useState({});
+  const [credentials, setCredentials] = useState({
+    email_phone: "",
+    password: "",
+  });
   const [visible, setVisible] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -149,7 +152,13 @@ export default function Login({ setFirstPage }) {
           </Button>
         </Grid>
       </Grid>
-      {loginError && <ErrorAlert error={loginError} setError={setLoginError} />}
+      {loginError && (
+        <MessageAlert
+          message={loginError}
+          setMessage={setLoginError}
+          type={"error"}
+        />
+      )}
     </Grid>
   );
 }

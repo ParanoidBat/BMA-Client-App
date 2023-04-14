@@ -10,13 +10,14 @@ import {
 import axios from "axios";
 import Variables from "variables";
 import { AuthContext } from "contexts/authContext";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import Progress from "components/Progress";
 import styles from "./styles";
 
 export default function Settings() {
   const [isSatOff, setIsSatOff] = useState(false);
   const [error, setError] = useState(undefined);
+  const [success, setSuccess] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
   const { authObject } = useContext(AuthContext);
@@ -45,7 +46,10 @@ export default function Settings() {
           is_saturday_off: isSatOff,
         }
       )
-      .then((res) => setError(res.data.error))
+      .then((res) => {
+        setError(res.data.error);
+        setSuccess("Settings updated successfully!");
+      })
       .catch((error) => setError(error))
       .finally(setLoading(false));
   };
@@ -77,7 +81,16 @@ export default function Settings() {
           )}
         </Grid>
       </Grid>
-      {error && <ErrorAlert error={error} setError={setError} />}
+      {error && (
+        <MessageAlert message={error} setMessage={setError} type={"error"} />
+      )}
+      {success && (
+        <MessageAlert
+          message={success}
+          setMessage={setSuccess}
+          type={"success"}
+        />
+      )}
     </Grid>
   );
 }

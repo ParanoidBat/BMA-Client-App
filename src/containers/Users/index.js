@@ -13,7 +13,7 @@ import { KeyboardArrowDownOutlined, AddOutlined } from "@mui/icons-material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import Variables from "variables";
 import { NavLink } from "react-router-dom";
 import InputModal from "components/InputModal";
@@ -201,7 +201,9 @@ export default function Users() {
         >
           Load More
         </Button>
-        {error && <ErrorAlert error={error} setError={setError} />}
+        {error && (
+          <MessageAlert message={error} setMessage={setError} type={"error"} />
+        )}
       </Grid>
       <Button
         variant="contained"

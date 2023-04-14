@@ -4,7 +4,7 @@ import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import AttendanceCard from "components/AttendanceCard";
 import Variables from "variables";
 import AttendanceChip from "components/AttendanceChip";
@@ -211,7 +211,9 @@ export default function Reports() {
           </Grid>
         </>
       )}
-      {error && <ErrorAlert error={error} setError={setError} />}
+      {error && (
+        <MessageAlert message={error} setMessage={setError} type={"error"} />
+      )}
     </Grid>
   );
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Variables from "variables";
-import ErrorAlert from "components/ErrorAlert";
+import MessageAlert from "components/MessageAlert";
 import { Grid, Typography, Button } from "@mui/material";
 
 import styles from "./styles";
@@ -102,7 +102,9 @@ export default function UserDetails() {
             Report
           </Button>
         </Grid>
-        {error && <ErrorAlert error={error} setError={setError} />}
+        {error && (
+          <MessageAlert message={error} setMessage={setError} type={"error"} />
+        )}
       </Grid>
     )
   );
