@@ -102,7 +102,7 @@ export default function UserReport() {
           <Grid item xs={3}>
             <Button
               variant="contained"
-              color="success"
+              color="info"
               size="small"
               onClick={() => getUserReport()}
             >
@@ -112,7 +112,7 @@ export default function UserReport() {
           <Grid item xs={3}>
             <Button
               variant="contained"
-              color="primary"
+              color="error"
               size="small"
               onClick={() => handleClear()}
             >
@@ -130,12 +130,16 @@ export default function UserReport() {
           </Grid>
           <Grid container item direction="column">
             {report.data.map((report, index) => (
-              <AttendanceCard report={report} index={index} />
+              <AttendanceCard
+                key={`user_report_${index}`}
+                report={report}
+                index={index}
+              />
             ))}
             <Button
               endIcon={<KeyboardArrowDownOutlined />}
               onClick={() => setPage((prev) => prev + 1)}
-              disabled={report.data.length === report.count}
+              disabled={!report.count || report.data.length >= report.count}
             >
               Load More
             </Button>

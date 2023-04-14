@@ -43,14 +43,15 @@ export default function Reports() {
     }));
   };
 
+  const handleClear = () => {
+    setDates({ from: "2000-01-01", to: "2000-01-01" });
+    setPage(1);
+  };
+
   const getReports = () => {
     let reportFor = ranges[value];
     if (reportFor === "3 months") reportFor = "three";
     if (reportFor === "custom") {
-      if (dates.from === "2000-01-01" || dates.to === "2000-01-01") {
-        setError("Select Valid Dates");
-        return;
-      }
       setLoading(true);
 
       axios
@@ -119,6 +120,7 @@ export default function Reports() {
           if (res.data.error) setError(res.data.error);
           else {
             setReports((prev) => ({
+              ...prev,
               data: [...prev.data, ...res.data.data],
             }));
             setPage(res.data.page);
@@ -137,6 +139,7 @@ export default function Reports() {
           if (res.data.error) setError(res.data.error);
           else {
             setReports((prev) => ({
+              ...prev,
               data: [...prev.data, ...res.data.data],
             }));
             setPage(res.data.page);
@@ -178,7 +181,13 @@ export default function Reports() {
               onChange={handleDateChange}
             />
           </Grid>
-          <Grid item xs={10} sx={styles.marginTop}>
+          <Grid
+            container
+            item
+            xs={10}
+            justifyContent={"space-around"}
+            sx={styles.marginTop}
+          >
             <Button
               variant="contained"
               color="info"
@@ -186,6 +195,14 @@ export default function Reports() {
               onClick={() => getReports()}
             >
               Get
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              size="small"
+              onClick={() => handleClear()}
+            >
+              Clear
             </Button>
           </Grid>
         </Grid>
@@ -208,7 +225,7 @@ export default function Reports() {
             <Button
               endIcon={<KeyboardArrowDownOutlined />}
               onClick={() => handleLoadMore()}
-              disabled={!reports.count || reports.data.length === reports.count}
+              disabled={!reports.count || reports.data.length >= reports.count}
             >
               Load More
             </Button>
