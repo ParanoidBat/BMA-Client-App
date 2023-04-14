@@ -199,7 +199,11 @@ export default function Reports() {
           </Grid>
           <Grid container item direction="column">
             {reports.data.map((report, index) => (
-              <AttendanceCard report={report} index={index} />
+              <AttendanceCard
+                key={`${ranges[value]}_report_${index}`}
+                report={report}
+                index={index}
+              />
             ))}
             <Button
               endIcon={<KeyboardArrowDownOutlined />}

@@ -27,7 +27,7 @@ export default function Login({ setFirstPage }) {
   const [loginError, setLoginError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [inputError, setInputError] = useState({
-    email: false,
+    email_phone: false,
     password: false,
   });
 

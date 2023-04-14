@@ -43,7 +43,11 @@ export default function TodaysReport() {
       </Grid>
       <Grid container item direction="column">
         {report.data.map((reportObj, index) => (
-          <AttendanceCard report={reportObj} index={index} />
+          <AttendanceCard
+            key={`daily_report_${index}`}
+            report={reportObj}
+            index={index}
+          />
         ))}
       </Grid>
       {error && (
