@@ -10,7 +10,12 @@ import MessageAlert from "components/MessageAlert";
 import styles from "./styles";
 
 export default function OrgSignup({ setOrganizationData }) {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    name: "",
+    address: "",
+    phone: "",
+    email: "",
+  });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -28,13 +33,27 @@ export default function OrgSignup({ setOrganizationData }) {
       return;
     }
 
+    let validEmail;
+    if (data.email) {
+      validEmail = String(data.email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
+      if (!validEmail) {
+        setError("Invalid Email");
+        return;
+      } else validEmail = data.email.toLowerCase();
+    }
+
     setLoading(true);
 
     setOrganizationData({
       orgName: data.name,
       orgAddress: data.address,
       orgPhone: data.phone,
-      orgEmail: data.email,
+      orgEmail: validEmail,
     });
   };
 

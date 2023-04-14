@@ -35,6 +35,20 @@ export default function UserSignup({ organizationData, setFirstPage }) {
       return;
     }
 
+    let validEmail;
+    if (data.email) {
+      validEmail = String(data.email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+
+      if (!validEmail) {
+        setError("Invalid Email");
+        return;
+      } else validEmail = data.email.toLowerCase();
+    }
+
     setLoading(true);
 
     return axios
@@ -42,7 +56,7 @@ export default function UserSignup({ organizationData, setFirstPage }) {
         name: data.name,
         phone: data.phone,
         address: data.address,
-        email: data.email,
+        email: validEmail,
         password: data.password,
         user_role: "Admin",
         finger_id: 0,
