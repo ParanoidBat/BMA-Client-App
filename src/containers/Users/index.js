@@ -26,7 +26,8 @@ export default function Users() {
   });
   const [userData, setUserData] = useState({});
   const [page, setPage] = useState(1);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(undefined);
+  const [success, setSuccess] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
@@ -34,10 +35,15 @@ export default function Users() {
 
   useEffect(() => {
     setLoading(true);
+    getUsersList();
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const getUsersList = () => {
     axios
       .get(
-        `${Variables.API_URI}/organization/${authObject.user.organization_id}/users?page=1`
+        `${Variables.API_URI}/organization/${authObject.user.organization_id}/users?page=${page}`
       )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
@@ -50,9 +56,7 @@ export default function Users() {
       })
       .catch((error) => setError(error.message))
       .finally(setLoading(false));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   const roles = [
     {
@@ -130,34 +134,39 @@ export default function Users() {
         }
       )
       .then((res) => {
-        if (res.data.error) setError(res.data.error);
+        if (res.data.error) {
+          setError(res.data.error);
+        } else {
+          setSuccess("User created successfully");
+          getUsersList();
+        }
         setUserData({});
       })
       .catch((error) => setError(error.message))
       .finally(setOpenModal(false));
   };
 
-  const handleLoadMore = () => {
-    setLoading(true);
+  // const handleLoadMore = () => {
+  //   setLoading(true);
 
-    axios
-      .get(
-        `${Variables.API_URI}/organization/${
-          authObject.user.organization_id
-        }/users?page=${page + 1}`
-      )
-      .then((res) => {
-        if (res.data.error) setError(res.data.error);
-        else {
-          setUsersList((prev) => ({
-            data: [...prev.data, ...res.data.data],
-          }));
-          setPage(res.data.page);
-        }
-      })
-      .catch((error) => setError(error.message))
-      .finally(setLoading(false));
-  };
+  //   axios
+  //     .get(
+  //       `${Variables.API_URI}/organization/${
+  //         authObject.user.organization_id
+  //       }/users?page=${page + 1}`
+  //     )
+  //     .then((res) => {
+  //       if (res.data.error) setError(res.data.error);
+  //       else {
+  //         setUsersList((prev) => ({
+  //           data: [...prev.data, ...res.data.data],
+  //         }));
+  //         setPage(res.data.page);
+  //       }
+  //     })
+  //     .catch((error) => setError(error.message))
+  //     .finally(setLoading(false));
+  // };
 
   return loading ? (
     <Progress color={"info"} />
@@ -196,13 +205,20 @@ export default function Users() {
         ))}
         <Button
           endIcon={<KeyboardArrowDownOutlined />}
-          onClick={() => handleLoadMore()}
+          onClick={() => setPage((prev) => prev + 1)}
           disabled={usersList.data.length === usersList.count}
         >
           Load More
         </Button>
         {error && (
           <MessageAlert message={error} setMessage={setError} type={"error"} />
+        )}
+        {success && (
+          <MessageAlert
+            message={success}
+            setMessage={setSuccess}
+            type={"success"}
+          />
         )}
       </Grid>
       <Button
