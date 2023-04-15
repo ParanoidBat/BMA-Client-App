@@ -56,6 +56,11 @@ export default function UserDetails() {
   ];
 
   const handleUpdate = () => {
+    if (userData.salary !== undefined && userData.salary < 0) {
+      setError("Invalid Salary");
+      return;
+    }
+
     setLoading(true);
     axios
       .put(`${Variables.API_URI}/user/${id}`, {
