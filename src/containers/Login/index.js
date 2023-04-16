@@ -75,6 +75,10 @@ export default function Login({ setFirstPage }) {
           key: "OrgID",
           value: data.user.organization_id,
         });
+        await Storage.set({
+          key: "Token",
+          value: data.token,
+        });
 
         setAuthObject({
           token: data.token,

@@ -12,6 +12,7 @@ import {
 import { KeyboardArrowDownOutlined, AddOutlined } from "@mui/icons-material";
 import axios from "axios";
 import { AuthContext } from "contexts/authContext";
+import apiClient from "apiClient";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import Variables from "variables";
@@ -41,7 +42,7 @@ export default function Users() {
   }, [page]);
 
   const getUsersList = () => {
-    axios
+    apiClient
       .get(
         `${Variables.API_URI}/organization/${authObject.user.organization_id}/users?page=${page}`
       )
