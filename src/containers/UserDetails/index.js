@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Variables from "variables";
+import apiClient from "apiClient";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import { Grid, Typography, TextField, MenuItem, Button } from "@mui/material";
@@ -20,7 +20,7 @@ export default function UserDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
+    apiClient
       .get(`${Variables.API_URI}/user/${id}`)
       .then((res) => {
         setData(res.data.data);
@@ -28,7 +28,7 @@ export default function UserDetails() {
       })
       .catch((error) => setError(error.message));
 
-    axios
+    apiClient
       .get(
         `${Variables.API_URI}/user/percent_attendance/${id}/${authObject.user.organization_id}`
       )
@@ -62,7 +62,7 @@ export default function UserDetails() {
     }
 
     setLoading(true);
-    axios
+    apiClient
       .put(`${Variables.API_URI}/user/${id}`, {
         ...userData,
       })

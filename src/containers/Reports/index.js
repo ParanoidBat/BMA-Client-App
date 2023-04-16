@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Tab, Tabs, Grid, Typography, Input, Button } from "@mui/material";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
-import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import AttendanceCard from "components/AttendanceCard";
 import Variables from "variables";
+import apiClient from "apiClient";
 import AttendanceChip from "components/AttendanceChip";
 
 import styles from "./styles";
@@ -54,7 +54,7 @@ export default function Reports() {
     if (reportFor === "custom") {
       setLoading(true);
 
-      axios
+      apiClient
         .post(
           `${Variables.API_URI}/report/${reportFor}/${authObject.user.organization_id}?page=1`,
           {
@@ -76,7 +76,7 @@ export default function Reports() {
         .catch((error) => setError(error.message))
         .finally(setLoading(false));
     } else {
-      axios
+      apiClient
         .get(
           `${Variables.API_URI}/report/${reportFor}/${authObject.user.organization_id}?page=1`
         )
@@ -106,7 +106,7 @@ export default function Reports() {
       }
       setLoading(true);
 
-      axios
+      apiClient
         .post(
           `${Variables.API_URI}/report/${reportFor}/${
             authObject.user.organization_id
@@ -129,7 +129,7 @@ export default function Reports() {
         .catch((error) => setError(error.message))
         .finally(setLoading(false));
     } else {
-      axios
+      apiClient
         .get(
           `${Variables.API_URI}/report/${reportFor}/${
             authObject.user.organization_id

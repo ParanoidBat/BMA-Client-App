@@ -7,8 +7,8 @@ import {
   Switch,
   Button,
 } from "@mui/material";
-import axios from "axios";
 import Variables from "variables";
+import apiClient from "apiClient";
 import { AuthContext } from "contexts/authContext";
 import MessageAlert from "components/MessageAlert";
 import Progress from "components/Progress";
@@ -23,7 +23,7 @@ export default function Settings() {
   const { authObject } = useContext(AuthContext);
 
   useEffect(() => {
-    axios
+    apiClient
       .get(
         `${Variables.API_URI}/organization/${authObject.user.organization_id}`
       )
@@ -39,7 +39,7 @@ export default function Settings() {
   const handleSave = () => {
     setLoading(true);
 
-    axios
+    apiClient
       .put(
         `${Variables.API_URI}/organization/${authObject.user.organization_id}`,
         {

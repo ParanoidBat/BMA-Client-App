@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Grid, Chip } from "@mui/material";
 import { AuthContext } from "contexts/authContext";
-import axios from "axios";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import AttendanceCard from "components/AttendanceCard";
 import Variables from "variables";
+import apiClient from "apiClient";
 
 export default function TodaysReport() {
   const [report, setReport] = useState();
@@ -15,7 +15,7 @@ export default function TodaysReport() {
   const { authObject } = useContext(AuthContext);
 
   useEffect(() => {
-    axios
+    apiClient
       .get(
         `${Variables.API_URI}/report/today/${authObject.user.organization_id}`
       )

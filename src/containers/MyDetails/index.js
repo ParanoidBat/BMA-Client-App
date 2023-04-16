@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "apiClient";
 import Variables from "variables";
 import MessageAlert from "components/MessageAlert";
 import { Grid, Typography, Button } from "@mui/material";
@@ -15,7 +15,7 @@ export default function UserDetails() {
   const { id, orgID } = useParams();
 
   useEffect(() => {
-    axios
+    apiClient
       .get(`${Variables.API_URI}/user/${id}`)
       .then((res) => {
         setData(res.data.data);
@@ -23,7 +23,7 @@ export default function UserDetails() {
       })
       .catch((error) => setError(error));
 
-    axios
+    apiClient
       .get(`${Variables.API_URI}/user/percent_attendance/${id}/${orgID}`)
       .then((res) => {
         setPercentAttendance(res.data.data);

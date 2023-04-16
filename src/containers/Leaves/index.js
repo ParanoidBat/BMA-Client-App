@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
 import Variables from "variables";
-import axios from "axios";
+import apiClient from "apiClient";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import InputModal from "components/InputModal";
@@ -41,7 +41,7 @@ export default function Leaves() {
       }${status ? `&status=${status}` : ""}`;
     } else query = `${Variables.API_URI}/leave/${authObject.user.id}`;
 
-    axios
+    apiClient
       .get(query)
       .then((res) => {
         setLeaves(res.data.data);
@@ -77,7 +77,7 @@ export default function Leaves() {
   };
 
   const handleStatusUpdate = (value, id) => {
-    axios
+    apiClient
       .put(`${Variables.API_URI}/leave/${id}`, {
         status: value,
       })
@@ -112,7 +112,7 @@ export default function Leaves() {
       [dates.from, dates.to] = [dates.to, dates.from];
     }
 
-    axios
+    apiClient
       .post(`${Variables.API_URI}/leave`, {
         userID: authObject.user.id,
         orgID: authObject.user.organization_id,

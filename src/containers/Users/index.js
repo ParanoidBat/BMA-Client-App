@@ -10,7 +10,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import { KeyboardArrowDownOutlined, AddOutlined } from "@mui/icons-material";
-import axios from "axios";
 import { AuthContext } from "contexts/authContext";
 import apiClient from "apiClient";
 import Progress from "components/Progress";
@@ -100,7 +99,7 @@ export default function Users() {
   };
 
   const handleDeleteUser = (id) => {
-    axios
+    apiClient
       .delete(`${Variables.API_URI}/user/${id}`)
       .then((res) => {
         if (res.data.error) setError(res.data.error);
@@ -127,7 +126,7 @@ export default function Users() {
   const handleSave = () => {
     if (!validateInput()) return;
 
-    axios
+    apiClient
       .put(
         `${Variables.API_URI}/user/${userData.finger_id}/${authObject.user.organization_id}`,
         {
@@ -146,28 +145,6 @@ export default function Users() {
       .catch((error) => setError(error.message))
       .finally(setOpenModal(false));
   };
-
-  // const handleLoadMore = () => {
-  //   setLoading(true);
-
-  //   axios
-  //     .get(
-  //       `${Variables.API_URI}/organization/${
-  //         authObject.user.organization_id
-  //       }/users?page=${page + 1}`
-  //     )
-  //     .then((res) => {
-  //       if (res.data.error) setError(res.data.error);
-  //       else {
-  //         setUsersList((prev) => ({
-  //           data: [...prev.data, ...res.data.data],
-  //         }));
-  //         setPage(res.data.page);
-  //       }
-  //     })
-  //     .catch((error) => setError(error.message))
-  //     .finally(setLoading(false));
-  // };
 
   return loading ? (
     <Progress color={"info"} />

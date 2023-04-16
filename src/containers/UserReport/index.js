@@ -5,11 +5,11 @@ import AttendanceChip from "components/AttendanceChip";
 import MessageAlert from "components/MessageAlert";
 import Progress from "components/Progress";
 import Variables from "variables";
+import apiClient from "apiClient";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "contexts/authContext";
 import { differenceBy } from "lodash";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
-import axios from "axios";
 
 import styles from "./styles";
 
@@ -43,7 +43,7 @@ export default function UserReport() {
   const getUserReport = () => {
     if (dates.from === "2000-01-01" || dates.to === "2000-01-01") return;
 
-    axios
+    apiClient
       .post(
         `${Variables.API_URI}/report/user/${authObject.user.organization_id}/${id}?page=${page}`,
         {
