@@ -47,10 +47,10 @@ export default function Users() {
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else {
-          setUsersList({
-            data: res.data.data,
-            count: res.data.count,
-          });
+          setUsersList((prev) => ({
+            ...prev,
+            data: [...prev.data, ...res.data.data],
+          }));
         }
       })
       .catch((error) => setError(error.message))
@@ -180,7 +180,7 @@ export default function Users() {
         <Button
           endIcon={<KeyboardArrowDownOutlined />}
           onClick={() => setPage((prev) => prev + 1)}
-          disabled={usersList.data.length === usersList.count}
+          disabled={usersList.data.length >= usersList.count}
         >
           Load More
         </Button>
