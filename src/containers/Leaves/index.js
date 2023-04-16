@@ -10,7 +10,6 @@ import {
   Input,
 } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
-import Variables from "variables";
 import apiClient from "apiClient";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
@@ -36,10 +35,10 @@ export default function Leaves() {
     let query;
 
     if (authObject.user.user_role !== "Worker") {
-      query = `${Variables.API_URI}/leave?id=${
-        authObject.user.organization_id
-      }${status ? `&status=${status}` : ""}`;
-    } else query = `${Variables.API_URI}/leave/${authObject.user.id}`;
+      query = `/leave?id=${authObject.user.organization_id}${
+        status ? `&status=${status}` : ""
+      }`;
+    } else query = `/leave/${authObject.user.id}`;
 
     apiClient
       .get(query)
@@ -78,7 +77,7 @@ export default function Leaves() {
 
   const handleStatusUpdate = (value, id) => {
     apiClient
-      .put(`${Variables.API_URI}/leave/${id}`, {
+      .put(`/leave/${id}`, {
         status: value,
       })
       .then((res) => {
@@ -113,7 +112,7 @@ export default function Leaves() {
     }
 
     apiClient
-      .post(`${Variables.API_URI}/leave`, {
+      .post(`/leave`, {
         userID: authObject.user.id,
         orgID: authObject.user.organization_id,
         from: dates.from,

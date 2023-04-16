@@ -5,7 +5,6 @@ import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import AttendanceCard from "components/AttendanceCard";
-import Variables from "variables";
 import apiClient from "apiClient";
 import AttendanceChip from "components/AttendanceChip";
 
@@ -56,7 +55,7 @@ export default function Reports() {
 
       apiClient
         .post(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organization_id}?page=1`,
+          `/report/${reportFor}/${authObject.user.organization_id}?page=1`,
           {
             from: dates.from,
             to: dates.to,
@@ -77,9 +76,7 @@ export default function Reports() {
         .finally(setLoading(false));
     } else {
       apiClient
-        .get(
-          `${Variables.API_URI}/report/${reportFor}/${authObject.user.organization_id}?page=1`
-        )
+        .get(`/report/${reportFor}/${authObject.user.organization_id}?page=1`)
         .then((res) => {
           if (res.data.error) setError(res.data.error);
           else {
@@ -108,9 +105,9 @@ export default function Reports() {
 
       apiClient
         .post(
-          `${Variables.API_URI}/report/${reportFor}/${
-            authObject.user.organization_id
-          }?page=${page + 1}`,
+          `/report/${reportFor}/${authObject.user.organization_id}?page=${
+            page + 1
+          }`,
           {
             from: dates.from,
             to: dates.to,
@@ -131,9 +128,9 @@ export default function Reports() {
     } else {
       apiClient
         .get(
-          `${Variables.API_URI}/report/${reportFor}/${
-            authObject.user.organization_id
-          }?page=${page + 1}`
+          `/report/${reportFor}/${authObject.user.organization_id}?page=${
+            page + 1
+          }`
         )
         .then((res) => {
           if (res.data.error) setError(res.data.error);

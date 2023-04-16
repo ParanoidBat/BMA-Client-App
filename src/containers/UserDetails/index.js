@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Variables from "variables";
 import apiClient from "apiClient";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
@@ -21,7 +20,7 @@ export default function UserDetails() {
 
   useEffect(() => {
     apiClient
-      .get(`${Variables.API_URI}/user/${id}`)
+      .get(`/user/${id}`)
       .then((res) => {
         setData(res.data.data);
         setError(res.data.error);
@@ -29,9 +28,7 @@ export default function UserDetails() {
       .catch((error) => setError(error.message));
 
     apiClient
-      .get(
-        `${Variables.API_URI}/user/percent_attendance/${id}/${authObject.user.organization_id}`
-      )
+      .get(`/user/percent_attendance/${id}/${authObject.user.organization_id}`)
       .then((res) => {
         setPercentAttendance(res.data.data);
         setError(res.data.error);
@@ -63,7 +60,7 @@ export default function UserDetails() {
 
     setLoading(true);
     apiClient
-      .put(`${Variables.API_URI}/user/${id}`, {
+      .put(`/user/${id}`, {
         ...userData,
       })
       .then((res) => {

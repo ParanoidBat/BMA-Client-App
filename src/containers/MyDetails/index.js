@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import apiClient from "apiClient";
-import Variables from "variables";
 import MessageAlert from "components/MessageAlert";
 import { Grid, Typography, Button } from "@mui/material";
 
@@ -16,7 +15,7 @@ export default function UserDetails() {
 
   useEffect(() => {
     apiClient
-      .get(`${Variables.API_URI}/user/${id}`)
+      .get(`/user/${id}`)
       .then((res) => {
         setData(res.data.data);
         setError(res.data.error);
@@ -24,7 +23,7 @@ export default function UserDetails() {
       .catch((error) => setError(error));
 
     apiClient
-      .get(`${Variables.API_URI}/user/percent_attendance/${id}/${orgID}`)
+      .get(`/user/percent_attendance/${id}/${orgID}`)
       .then((res) => {
         setPercentAttendance(res.data.data);
         setError(res.data.error);

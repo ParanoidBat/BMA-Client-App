@@ -4,7 +4,6 @@ import AttendanceCard from "components/AttendanceCard";
 import AttendanceChip from "components/AttendanceChip";
 import MessageAlert from "components/MessageAlert";
 import Progress from "components/Progress";
-import Variables from "variables";
 import apiClient from "apiClient";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "contexts/authContext";
@@ -45,7 +44,7 @@ export default function UserReport() {
 
     apiClient
       .post(
-        `${Variables.API_URI}/report/user/${authObject.user.organization_id}/${id}?page=${page}`,
+        `/report/user/${authObject.user.organization_id}/${id}?page=${page}`,
         {
           from: dates.from,
           to: dates.to,

@@ -7,7 +7,6 @@ import {
   Switch,
   Button,
 } from "@mui/material";
-import Variables from "variables";
 import apiClient from "apiClient";
 import { AuthContext } from "contexts/authContext";
 import MessageAlert from "components/MessageAlert";
@@ -24,9 +23,7 @@ export default function Settings() {
 
   useEffect(() => {
     apiClient
-      .get(
-        `${Variables.API_URI}/organization/${authObject.user.organization_id}`
-      )
+      .get(`/organization/${authObject.user.organization_id}`)
       .then((res) => {
         setError(res.data.error);
         setIsSatOff(res.data.data.is_saturday_off);
@@ -40,12 +37,9 @@ export default function Settings() {
     setLoading(true);
 
     apiClient
-      .put(
-        `${Variables.API_URI}/organization/${authObject.user.organization_id}`,
-        {
-          is_saturday_off: isSatOff,
-        }
-      )
+      .put(`/organization/${authObject.user.organization_id}`, {
+        is_saturday_off: isSatOff,
+      })
       .then((res) => {
         setError(res.data.error);
         setSuccess("Settings updated successfully!");
@@ -59,7 +53,9 @@ export default function Settings() {
       <Grid item xs={12}>
         <Card>
           <CardContent sx={styles.cardContent}>
-            <Typography variant="h6">Saturday Is Off</Typography>
+            <Typography variant="h6">
+              Saturday Is {isSatOff ? "Off" : "On"}
+            </Typography>
             <Switch
               checked={isSatOff}
               onChange={(e) => setIsSatOff(e.target.checked)}

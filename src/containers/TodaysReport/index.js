@@ -4,7 +4,6 @@ import { AuthContext } from "contexts/authContext";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import AttendanceCard from "components/AttendanceCard";
-import Variables from "variables";
 import apiClient from "apiClient";
 
 export default function TodaysReport() {
@@ -16,9 +15,7 @@ export default function TodaysReport() {
 
   useEffect(() => {
     apiClient
-      .get(
-        `${Variables.API_URI}/report/today/${authObject.user.organization_id}`
-      )
+      .get(`/report/today/${authObject.user.organization_id}`)
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else {

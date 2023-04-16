@@ -1,3 +1,5 @@
+import Variables from "variables";
+
 const axios = require("axios");
 const { Storage } = require("@capacitor/storage");
 
@@ -25,6 +27,7 @@ const apiClient = async (url, method, req_data) => {
     const token = await Storage.get({ key: "Token" });
 
     const resp = await axios({
+      baseURL: Variables.API_URI,
       url,
       method,
       data: req_data,

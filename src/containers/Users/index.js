@@ -14,7 +14,6 @@ import { AuthContext } from "contexts/authContext";
 import apiClient from "apiClient";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
-import Variables from "variables";
 import { NavLink } from "react-router-dom";
 import InputModal from "components/InputModal";
 
@@ -43,7 +42,7 @@ export default function Users() {
   const getUsersList = () => {
     apiClient
       .get(
-        `${Variables.API_URI}/organization/${authObject.user.organization_id}/users?page=${page}`
+        `/organization/${authObject.user.organization_id}/users?page=${page}`
       )
       .then((res) => {
         if (res.data.error) setError(res.data.error);
@@ -100,7 +99,7 @@ export default function Users() {
 
   const handleDeleteUser = (id) => {
     apiClient
-      .delete(`${Variables.API_URI}/user/${id}`)
+      .delete(`/user/${id}`)
       .then((res) => {
         if (res.data.error) setError(res.data.error);
         else if (res.data.data) {
@@ -127,12 +126,9 @@ export default function Users() {
     if (!validateInput()) return;
 
     apiClient
-      .put(
-        `${Variables.API_URI}/user/${userData.finger_id}/${authObject.user.organization_id}`,
-        {
-          ...userData,
-        }
-      )
+      .put(`/user/${userData.finger_id}/${authObject.user.organization_id}`, {
+        ...userData,
+      })
       .then((res) => {
         if (res.data.error) {
           setError(res.data.error);
