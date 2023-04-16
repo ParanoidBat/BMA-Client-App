@@ -42,12 +42,11 @@ export default function UserSignup({ organizationData, setFirstPage }) {
         .match(
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
-
-      if (!validEmail) {
-        setError("Invalid Email");
-        return;
-      } else validEmail = data.email.toLowerCase();
     }
+    if (!validEmail) {
+      setError("Invalid Email");
+      return;
+    } else validEmail = data.email.toLowerCase();
 
     setLoading(true);
 
