@@ -14,6 +14,7 @@ import apiClient from "apiClient";
 import Progress from "components/Progress";
 import MessageAlert from "components/MessageAlert";
 import InputModal from "components/InputModal";
+import RejectReasonModal from "./reject-reason-modal";
 import { AuthContext } from "contexts/authContext";
 import moment from "moment";
 import { findIndex } from "lodash";
@@ -24,10 +25,14 @@ export default function Leaves() {
   const [leaves, setLeaves] = useState();
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(undefined);
-  const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState({ from: "2000-01-01", to: "2000-01-01" });
-  const [openModal, setOpenModal] = useState(false);
   const [reason, setReason] = useState("");
+  const [rejectedLeaveID, setRejectedLeaveID] = useState(0);
+
+  const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [openRejectModal, setOpenRejectModal] = useState(false);
+  const [refresh, setRefresh] = useState(true);
 
   const { authObject } = useContext(AuthContext);
 
@@ -40,15 +45,17 @@ export default function Leaves() {
       }`;
     } else query = `/leave/${authObject.user.id}`;
 
-    apiClient
-      .get(query)
-      .then((res) => {
-        setLeaves(res.data.data);
-      })
-      .catch((error) => setError(error.message))
-      .finally(setLoading(false));
+    if (refresh) {
+      apiClient
+        .get(query)
+        .then((res) => {
+          setLeaves(res.data.data);
+        })
+        .catch((error) => setError(error.message))
+        .finally(setLoading(false));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status, refresh]);
 
   const getStatusColor = (val) => {
     return val === "Pending"
@@ -102,6 +109,12 @@ export default function Leaves() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleReject = (id) => {
+    setRejectedLeaveID(id);
+    setRefresh(false);
+    setOpenRejectModal(true);
   };
 
   const handleApplyButton = () => {
@@ -165,8 +178,10 @@ export default function Leaves() {
                 {leave.name}
               </Typography>
               <Grid container item>
-                <Grid item xs={3}>
-                  <Typography sx={styles.infoFont}>From:</Typography>
+                <Grid item xs={4}>
+                  <Typography sx={styles.infoFont} fontWeight={"bold"}>
+                    From:
+                  </Typography>
                 </Grid>
                 <Grid item xs={"auto"}>
                   <Typography sx={styles.infoFont}>
@@ -175,8 +190,10 @@ export default function Leaves() {
                 </Grid>
               </Grid>
               <Grid container item>
-                <Grid item xs={3}>
-                  <Typography sx={styles.infoFont}>To:</Typography>
+                <Grid item xs={4}>
+                  <Typography sx={styles.infoFont} fontWeight={"bold"}>
+                    To:
+                  </Typography>
                 </Grid>
                 <Grid item xs={"auto"}>
                   <Typography sx={styles.infoFont}>
@@ -185,8 +202,10 @@ export default function Leaves() {
                 </Grid>
               </Grid>
               <Grid container item>
-                <Grid item xs={3}>
-                  <Typography sx={styles.infoFont}>Applied:</Typography>
+                <Grid item xs={4}>
+                  <Typography sx={styles.infoFont} fontWeight={"bold"}>
+                    Applied:
+                  </Typography>
                 </Grid>
                 <Grid item xs={"auto"}>
                   <Typography sx={styles.infoFont}>
@@ -195,8 +214,10 @@ export default function Leaves() {
                 </Grid>
               </Grid>
               <Grid container item>
-                <Grid item xs={3}>
-                  <Typography sx={styles.infoFont}>Reason:</Typography>
+                <Grid item xs={4}>
+                  <Typography sx={styles.infoFont} fontWeight={"bold"}>
+                    Reason:
+                  </Typography>
                 </Grid>
                 <Grid item xs={"auto"}>
                   <Typography sx={{ ...styles.infoFont, ...styles.reasonText }}>
@@ -204,6 +225,22 @@ export default function Leaves() {
                   </Typography>
                 </Grid>
               </Grid>
+              {leave.reject_reason ? (
+                <Grid container item>
+                  <Grid item xs={4}>
+                    <Typography sx={styles.infoFont} fontWeight={"bold"}>
+                      Response:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={"auto"}>
+                    <Typography
+                      sx={{ ...styles.infoFont, ...styles.reasonText }}
+                    >
+                      {leave.reject_reason}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ) : null}
               <Typography
                 textAlign={"center"}
                 sx={styles.status}
@@ -233,7 +270,7 @@ export default function Leaves() {
                       variant="contained"
                       color="error"
                       disabled={leave.leave_status !== "Pending"}
-                      onClick={() => handleStatusUpdate("Rejected", leave.id)}
+                      onClick={() => handleReject(leave.id)}
                     >
                       Reject
                     </Button>
@@ -305,6 +342,13 @@ export default function Leaves() {
             </Grid>
           </Grid>
         </InputModal>
+      )}
+      {openRejectModal && (
+        <RejectReasonModal
+          id={rejectedLeaveID}
+          onClose={() => setOpenRejectModal(false)}
+          setRefresh={setRefresh}
+        />
       )}
     </>
   );
